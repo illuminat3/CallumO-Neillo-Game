@@ -13,6 +13,8 @@ namespace Oneillo_2
         bool black = true;
         string player;
         int[,] boardData;
+        bool moveIsPossible;
+        bool legalMove;
         // On start setup board data.
         private int[,] MakeBoardArray()
         {
@@ -35,7 +37,7 @@ namespace Oneillo_2
 
             try
             {
-                _gameboardGui = new GameboardImageArray(this, boardData, top, bottom, 0, imagepaths); // sets up the board on top of the form
+                _gameboardGui = new GameboardImageArray(this, boardData, top, bottom, 3, imagepaths); // sets up the board on top of the form
                 _gameboardGui.TileClicked += new GameboardImageArray.TileClickedEventDelegate(GameTileClicked);
                 _gameboardGui.UpdateBoardGui(boardData);
             }
@@ -44,6 +46,7 @@ namespace Oneillo_2
                 DialogResult result = MessageBox.Show("Board Size Too Small! ");  // checks for excpetion
                 this.Close();
             }
+
 
         }
         // CLick Listener 
@@ -62,13 +65,115 @@ namespace Oneillo_2
                 else
                 {
                     _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
-                    player = "Orange";
+                    player = "Orange";  
 
                 }
             }
         }
-        private bool PossibleMoves(int row, int col, string player)
+        private bool IsAnyMoveValid(int row, int col, int changeInRow, int changeInCol, bool isAnyMovePossible)
         {
-            return true;        }
+            int trueCount = 0;
+
+            List<int> validRow = new List<int>();
+            List<int> validCol = new List<int>();
+
+            validRow.Add(row);
+            validCol.Add(col);
+
+            row += changeInRow;
+            col += changeInCol;
+
+            bool sameCounterFound;
+            sameCounterFound = false;
+
+            while ((row >= 0) && (row < 8) && (col >= 0) && (col < 8))
+            {
+
+                if (boardData[row, col] == gameMoves)
+                {
+                    sameCounterFound = true;
+                    break;
+                }
+                if (boardData[row, col] == 10)
+                {
+                    break;
+                }
+
+                validRow.Add(row);
+                validCol.Add(col);
+
+                row += changeInRow;
+                col += changeInCol;
+                trueCount++;
+            }
+
+            if ((trueCount >= 1) && (sameCounterFound == true))
+            {
+                isAnyMovePossible = true;
+            }
+            return isAnyMovePossible;
+        }
+        private void IsGameFinished(int numOfBlack, int numOfWhite)
+        {
+            bool gameNotWonByFullBoard = false;
+            bool gameNotWonByNoCounters = false;
+            bool isAnyMovePossible = false;
+
+            for (int xWinCheck = 0; xWinCheck <= 7; xWinCheck++)
+            {
+                for (int yWinCheck = 0; yWinCheck <= 7; yWinCheck++)
+                {
+                    //checks whether the board is full by counting the green squares
+                    if (boardData[xWinCheck, yWinCheck] == 10)
+                        gameNotWonByFullBoard = true;
+
+                    //Here could I add something which checks whether both players have a counter on the board- use the numofcounters variable
+                    if ((numOfBlack > 0) && (numOfWhite > 0))
+                        gameNotWonByNoCounters = true;
+                }
+            }
+
+
+            //checks whether any move on the board is possible... only runs the method for green squares as only they can be pressed
+            for (int row = 0; row <= 7; row++)
+            {
+                for (int col = 0; col <= 7; col++)
+                {
+                    if (boardData[row, col] == 10)
+                    {
+                        isAnyMovePossible = IsAnyMoveValid(row, col, 0, 1, isAnyMovePossible);
+                        isAnyMovePossible = IsAnyMoveValid(row, col, 1, -1, isAnyMovePossible);
+                        isAnyMovePossible = IsAnyMoveValid(row, col, -1, 1, isAnyMovePossible);
+                        isAnyMovePossible = IsAnyMoveValid(row, col, 0, -1, isAnyMovePossible);
+                        isAnyMovePossible = IsAnyMoveValid(row, col, 1, 0, isAnyMovePossible);
+                        isAnyMovePossible = IsAnyMoveValid(row, col, -1, 0, isAnyMovePossible);
+                        isAnyMovePossible = IsAnyMoveValid(row, col, -1, -1, isAnyMovePossible);
+                        isAnyMovePossible = IsAnyMoveValid(row, col, 1, 1, isAnyMovePossible);
+                    }
+                }
+            }
+
+            //if gameNotWon is not equal to true(IF THE GAME HAS BEEN WON)
+            if ((gameNotWonByFullBoard != true) || (gameNotWonByNoCounters != true))
+                WinnerCheck(numOfBlack, numOfWhite);
+
+            else if (isAnyMovePossible == false)
+                ForfeitGame();
+
+            else
+                return;
+        }
+        private void ForfeitGame()
+        {
+            return;
+        }
+
+        private void WinnerCheck(int numOfBlack, int numOfWhite)
+        {
+            return;
+        }
+
+
     }
+
 }
