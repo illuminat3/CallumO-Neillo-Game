@@ -88,8 +88,6 @@ namespace Oneillo_2
         private bool IsAnyMoveValid(int row, int col, int changeInRow, int changeInCol, bool isAnyMovePossible)
         {
             int trueCount = 0;
-            int[,] validMoveArray = new int[8, 8];
-            boardData.CopyTo(validMoveArray, 0);
 
             List<int> validRow = new List<int>();
             List<int> validCol = new List<int>();
