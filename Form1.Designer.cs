@@ -28,7 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
+            PlayerOnePieceLbl = new Label();
+            PlayerTwoPieceLbl = new Label();
+            PlayerOneName = new TextBox();
+            PlayerTwoName = new TextBox();
             SuspendLayout();
+            // 
+            // PlayerOnePieceLbl
+            // 
+            PlayerOnePieceLbl.AutoSize = true;
+            PlayerOnePieceLbl.Location = new Point(136, 740);
+            PlayerOnePieceLbl.Name = "PlayerOnePieceLbl";
+            PlayerOnePieceLbl.Size = new Size(38, 15);
+            PlayerOnePieceLbl.TabIndex = 0;
+            PlayerOnePieceLbl.Text = "label1";
+            // 
+            // PlayerTwoPieceLbl
+            // 
+            PlayerTwoPieceLbl.AutoSize = true;
+            PlayerTwoPieceLbl.Location = new Point(359, 740);
+            PlayerTwoPieceLbl.Name = "PlayerTwoPieceLbl";
+            PlayerTwoPieceLbl.Size = new Size(38, 15);
+            PlayerTwoPieceLbl.TabIndex = 1;
+            PlayerTwoPieceLbl.Text = "label1";
+            // 
+            // PlayerOneName
+            // 
+            PlayerOneName.Location = new Point(12, 737);
+            PlayerOneName.Name = "PlayerOneName";
+            PlayerOneName.Size = new Size(100, 23);
+            PlayerOneName.TabIndex = 2;
+            // 
+            // PlayerTwoName
+            // 
+            PlayerTwoName.Location = new Point(235, 737);
+            PlayerTwoName.Name = "PlayerTwoName";
+            PlayerTwoName.Size = new Size(100, 23);
+            PlayerTwoName.TabIndex = 3;
             // 
             // Form1
             // 
@@ -36,11 +72,21 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DarkBlue;
             ClientSize = new Size(792, 769);
+            Controls.Add(PlayerTwoName);
+            Controls.Add(PlayerOneName);
+            Controls.Add(PlayerTwoPieceLbl);
+            Controls.Add(PlayerOnePieceLbl);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Label PlayerOnePieceLbl;
+        private Label PlayerTwoPieceLbl;
+        private TextBox PlayerOneName;
+        private TextBox PlayerTwoName;
     }
 }

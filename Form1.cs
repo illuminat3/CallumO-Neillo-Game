@@ -1,4 +1,5 @@
 using GameboardGUI;
+using System.Data.Common;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
 
@@ -13,15 +14,30 @@ namespace Oneillo_2
         int gameMoves = 0;
         int row, col, changeInRow, changeInCol;
         int numOfBlack, numOfWhite;
+        int player = 1;
 
         string imagepaths = "C:\\Users\\CallumCunningham\\source\\repos\\Oneillo_2\\resources\\";
-        string player;
         string winner;
+
 
         bool moveIsPossible;
         bool legalMove;
-        bool black = true;
         bool isAnyMovePossible;
+
+        private bool HasGameEnded()
+        {
+            foreach (int i in boardData)
+            {
+                if (i == 10)
+                {
+                    return false;
+                }
+            }
+
+            GameEnded();
+            return true;
+        }
+
 
         private int[,] MakeBoardArray()
         {
@@ -34,7 +50,7 @@ namespace Oneillo_2
             return StartArray;
         }
 
-         // On start setup board data.
+        // On start setup board data.
 
         public Form1()
         {
@@ -70,40 +86,39 @@ namespace Oneillo_2
                 if (gameMoves % 2 == 0)
                 {
                     _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
-                    player = "Black";
+                    player = 1;
                 }
-                else
+                if (gameMoves % 2 != 0)
                 {
                     _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
-                    player = "Orange";  
-
+                    player = 2;
                 }
             }
-            
-                 IsAnyMoveValid(row, col, changeInRow, changeInCol, isAnyMovePossible);
-                 IsGameFinished(numOfBlack, numOfWhite);
         }
 
-
-        private bool IsAnyMoveValid(int row, int col, int changeInRow, int changeInCol, bool isAnyMovePossible)
+        private void Validator(int row, int col, int changeInRow, int changeInCol)
         {
             int trueCount = 0;
-
+            //here we are making lists containing the rows and the columns that need colouring in
             List<int> validRow = new List<int>();
             List<int> validCol = new List<int>();
 
             validRow.Add(row);
             validCol.Add(col);
-
+            //adding the change in direction to the row to be checked
             row += changeInRow;
             col += changeInCol;
+            //a bool for if the same counter as the player is met - helps with the validation
+            bool sameCounterFound;
+            sameCounterFound = false;
 
-            bool sameCounterFound = false;
 
+            //we need to make a while in the bounds of the array so that an error isnt thrown
             while ((row >= 0) && (row < 8) && (col >= 0) && (col < 8))
             {
-
-                if (boardData[row, col] == gameMoves)
+                //we need to go through each item in the row/col/diagonal in array but we
+                //need to make sure they are not green or the colour of the player
+                if (boardData[row, col] == player)
                 {
                     sameCounterFound = true;
                     break;
@@ -112,30 +127,30 @@ namespace Oneillo_2
                 {
                     break;
                 }
-
+                //adding to a list of valid moves which I can later go through-- ones that need colouring
+                //the list will only be gone through if the move is valid
                 validRow.Add(row);
                 validCol.Add(col);
-
-                //validMoveArray[row, col] = 3;
-
 
                 row += changeInRow;
                 col += changeInCol;
                 trueCount++;
             }
 
-
             if ((trueCount >= 1) && (sameCounterFound == true))
             {
-                isAnyMovePossible = true;
+                for (int countNumber = 0; countNumber < validRow.Count; countNumber++)
+                {
+                    boardData[validRow[countNumber], validCol[countNumber]] = player;
+                }
+                _gameboardGui.UpDateImages(boardData);
+                legalMove = true;
             }
-
-            _gameboardGui.UpdateBoardGui(validMoveArray);
-    //       return isAnyMovePossible;
         }
 
 
-        public void IsGameFinished(int numOfBlack, int numOfWhite)
+
+        void IsGameFinished(int numOfBlack, int numOfWhite)
         {
             bool gameNotWonByFullBoard = false;
             bool gameNotWonByNoCounters = false;
@@ -159,28 +174,7 @@ namespace Oneillo_2
             boardData.CopyTo(validMoveArray, 0);
 
             //checks whether any move on the board is possible... only runs the method for green squares as only they can be pressed
-            for (int row = 0; row <= 7; row++)
-            {
-                for (int col = 0; col <= 7; col++)
-                {
-                    if (boardData[row, col] == 10)
-                    {
-                        isAnyMovePossible = IsAnyMoveValid(row, col, 0, 1, isAnyMovePossible);
-                        if (isAnyMovePossible) _gameboardGui.SetTile(row, col + 1, 3.ToString());
-                        isAnyMovePossible = IsAnyMoveValid(row, col, 1, -1, isAnyMovePossible);
-                        isAnyMovePossible = IsAnyMoveValid(row, col, -1, 1, isAnyMovePossible);
-                        isAnyMovePossible = IsAnyMoveValid(row, col, 0, -1, isAnyMovePossible);
-                        isAnyMovePossible = IsAnyMoveValid(row, col, 1, 0, isAnyMovePossible);
-                        isAnyMovePossible = IsAnyMoveValid(row, col, -1, 0, isAnyMovePossible);
-                        isAnyMovePossible = IsAnyMoveValid(row, col, -1, -1, isAnyMovePossible);
-                        isAnyMovePossible = IsAnyMoveValid(row, col, 1, 1, isAnyMovePossible);
 
-                       
-
-                    }
-                }
-
-            }
             _gameboardGui.UpdateBoardGui(validMoveArray);
 
             //if gameNotWon is not equal to true(IF THE GAME HAS BEEN WON)
@@ -193,13 +187,29 @@ namespace Oneillo_2
             else
                 return;
         }
-        
-        private void ForfeitGame()  //Function to be completed
+
+        void ForfeitGame()  //Function to be completed
         {
             return;
         }
 
-        private void WinnerCheck(int numOfBlack, int numOfWhite)  //Function to be compketed
+        private void GameEnded()
+        {
+            if (int.Parse(PlayerOnePieceLbl.Text) > int.Parse(PlayerTwoPieceLbl.Text))
+            {
+                MessageBox.Show($"{PlayerOneName.Text} is the winner.");
+            }
+            else if (int.Parse(PlayerOnePieceLbl.Text) == int.Parse(PlayerTwoPieceLbl.Text))
+            {
+                MessageBox.Show("The game was a draw.");
+            }
+            else
+            {
+                MessageBox.Show($"{PlayerTwoName.Text} is the winner.");
+            }
+        }
+
+        void WinnerCheck(int numOfBlack, int numOfWhite)  //Function to be compketed
         {
             if (numOfBlack > numOfWhite)
             {
@@ -214,5 +224,8 @@ namespace Oneillo_2
                 winner = "Draw";
             }
         }
+
+
+
     }
 }
