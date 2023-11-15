@@ -107,12 +107,10 @@ namespace Oneillo_2
                                 numOfBlack++;
                             if (boardData[xValCheck0, yValCheck0] == 1)
                                 numOfWhite++;
-                            if (boardData[xValCheck0, yValCheck0] == 3)
-                            {
-                                _gameboardGui.SetTile(row, col, 3.ToString());
-                            }
                         }
+
                     }
+                    _gameboardGui.SetTile(row, col, 3.ToString());
                     //prints the number of tokens each player has onto the screen
                     PlayerOnePieceLbl.Text = numOfBlack.ToString() + "X";
                     PlayerTwoPieceLbl.Text = numOfWhite.ToString() + "X";
@@ -128,29 +126,7 @@ namespace Oneillo_2
             }
         }
 
-
-        public void GameTileClicked(object sender, EventArgs e)
-        {
-            gameMoves++;
-            int RowCLicked = _gameboardGui.GetCurrentRowIndex(sender);
-            int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
-
-            if (boardData[RowCLicked, ColumnClicked] == 0)
-            {
-                if (gameMoves % 2 == 0)
-                {
-                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
-                    player = 1;
-                }
-                if (gameMoves % 2 != 0)
-                {
-                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
-                    player = 2;
-                }
-            }
-        }
-
-        private void Validator(int row, int col, int changeInRow, int changeInCol)
+        private bool IsAnyMoveValid(int row, int col, int changeInRow, int changeInCol, bool isAnyMovePossible)
         {
             int trueCount = 0;
             //here we are making lists containing the rows and the columns that need colouring in
@@ -193,10 +169,120 @@ namespace Oneillo_2
 
             if ((trueCount >= 1) && (sameCounterFound == true))
             {
+                isAnyMovePossible = true;
+            }
+            return isAnyMovePossible;
+        }
+
+        public void GameTileClicked(object sender, EventArgs e)
+        {
+            gameMoves++;
+            int RowCLicked = _gameboardGui.GetCurrentRowIndex(sender);
+            int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
+
+            if (boardData[RowCLicked, ColumnClicked] == 0)
+            {
+                if (gameMoves % 2 == 0)
+                {
+                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
+                    player = 1;
+                }
+                if (gameMoves % 2 != 0)
+                {
+                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
+                    player = 2;
+                }
+            }
+            if (IsAnyMoveValid(row, col, 0 ,1, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+            if (IsAnyMoveValid(row, col, 1, 0, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+            if (IsAnyMoveValid(row, col, 1, 1, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+            if (IsAnyMoveValid(row, col, 0, 0, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+            if (IsAnyMoveValid(row, col, -1, 0, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+            if (IsAnyMoveValid(row, col, 0, -1, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+            if (IsAnyMoveValid(row, col, -1, 1, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+            if (IsAnyMoveValid(row, col, 1, -1, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+            if (IsAnyMoveValid(row, col, -1, -1, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+        }
+
+        public void Validator(int row, int col, int changeInRow, int changeInCol)
+        {
+            int trueCount = 0;
+            //here we are making lists containing the rows and the columns that need colouring in
+            List<int> validRow = new List<int>();
+            List<int> validCol = new List<int>();
+
+            validRow.Add(row);
+            validCol.Add(col);
+            //adding the change in direction to the row to be checked
+            row += changeInRow;
+            col += changeInCol;
+            //a bool for if the same counter as the player is met - helps with the validation
+            bool sameCounterFound;
+            sameCounterFound = false;
+
+
+            //we need to make a while in the bounds of the array so that an error isnt thrown
+            while ((row >= 0) && (row < 8) && (col >= 0) && (col < 8))
+            {
+                //we need to go through each item in the row/col/diagonal in array but we
+                //need to make sure they are not green or the colour of the player
+                if (boardData[row, col] == player)
+                {
+                    sameCounterFound = true;
+                    break;
+                }
+                if (boardData[row, col] == 10)
+                {
+                    break;
+                }
+                if (boardData[row, col] == 3)
+                {
+                    _gameboardGui.SetTile(row, col, 3.ToString());
+                }
+                //adding to a list of valid moves which I can later go through-- ones that need colouring
+                //the list will only be gone through if the move is valid
+                validRow.Add(row);
+                validCol.Add(col);
+
+                row += changeInRow;
+                col += changeInCol;
+                trueCount++;
+            }
+
+            if ((trueCount >= 1) && (sameCounterFound == true))
+            {
                 for (int countNumber = 0; countNumber < validRow.Count; countNumber++)
                 {
                     boardData[validRow[countNumber], validCol[countNumber]] = player;
                 }
+                _gameboardGui.SetTile(row, col, 3.ToString());
                 _gameboardGui.UpdateBoardGui(boardData);
                 legalMove = true;
             }
