@@ -71,10 +71,64 @@ namespace Oneillo_2
                 DialogResult result = MessageBox.Show("Board Size Too Small! ");  // checks for excpetion
                 this.Close();
             }
-
-
         }
         // CLick Listener 
+
+        private void Which_Element_Clicked(object sender, EventArgs e)
+        {
+            int numOfWhite = 0;
+            int numOfBlack = 0;
+            //gets the individual item's row and column
+            int row = boardData.GetLength(0);
+            int column = boardData.GetLength(1);
+
+            //link to function which validates if the move is possible
+            if (boardData[row, column] == 10)
+            {
+                //calls method 8 times for all directions
+                Validator(row, column, 0, 1);
+                Validator(row, column, 1, -1);
+                Validator(row, column, -1, 1);
+                Validator(row, column, 0, -1);
+                Validator(row, column, 1, 0);
+                Validator(row, column, -1, 0);
+                Validator(row, column, -1, -1);
+                Validator(row, column, 1, 1);
+
+                //changing player
+                if (legalMove == true)
+                {
+                    //we will count the number of each counter in the grid here, and we will display this in labels on the screen
+                    for (int xValCheck0 = 0; xValCheck0 <= 7; xValCheck0++)
+                    {
+                        for (int yValCheck0 = 0; yValCheck0 <= 7; yValCheck0++)
+                        {
+                            if (boardData[xValCheck0, yValCheck0] == 0)
+                                numOfBlack++;
+                            if (boardData[xValCheck0, yValCheck0] == 1)
+                                numOfWhite++;
+                            if (boardData[xValCheck0, yValCheck0] == 3)
+                            {
+                                _gameboardGui.SetTile(row, col, 3.ToString());
+                            }
+                        }
+                    }
+                    //prints the number of tokens each player has onto the screen
+                    PlayerOnePieceLbl.Text = numOfBlack.ToString() + "X";
+                    PlayerTwoPieceLbl.Text = numOfWhite.ToString() + "X";
+
+                    //this changes which player's turn it is and it also changes which label shows
+
+
+                    IsGameFinished(numOfBlack, numOfWhite);
+
+                }
+                //defaults back to false as we use a global
+                legalMove = false;
+            }
+        }
+
+
         public void GameTileClicked(object sender, EventArgs e)
         {
             gameMoves++;
@@ -143,7 +197,7 @@ namespace Oneillo_2
                 {
                     boardData[validRow[countNumber], validCol[countNumber]] = player;
                 }
-                _gameboardGui.UpDateImages(boardData);
+                _gameboardGui.UpdateBoardGui(boardData);
                 legalMove = true;
             }
         }
