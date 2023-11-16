@@ -110,7 +110,7 @@ namespace Oneillo_2
                         }
 
                     }
-                    _gameboardGui.SetTile(row, col, 3.ToString());
+                    _gameboardGui.SetTile(row, column, 3.ToString());
                     //prints the number of tokens each player has onto the screen
                     PlayerOnePieceLbl.Text = numOfBlack.ToString() + "X";
                     PlayerTwoPieceLbl.Text = numOfWhite.ToString() + "X";
@@ -153,7 +153,7 @@ namespace Oneillo_2
                     sameCounterFound = true;
                     break;
                 }
-                if (boardData[row, col] == 10)
+                if (boardData[row, col] == 0)
                 {
                     break;
                 }
@@ -202,10 +202,6 @@ namespace Oneillo_2
                 _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
             }
             if (IsAnyMoveValid(row, col, 1, 1, isAnyMovePossible))
-            {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-            if (IsAnyMoveValid(row, col, 0, 0, isAnyMovePossible))
             {
                 _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
             }
@@ -330,7 +326,8 @@ namespace Oneillo_2
 
         void ForfeitGame()  //Function to be completed
         {
-            return;
+            _gameboardGui.Dispose();
+            InitializeComponent();
         }
 
         private void GameEnded()
