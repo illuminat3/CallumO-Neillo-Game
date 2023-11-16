@@ -16,7 +16,7 @@ namespace Oneillo_2
         int numOfBlack, numOfWhite;
         int player = 1;
 
-        string imagepaths = "C:\\Users\\CallumCunningham\\source\\repos\\Oneillo_2\\resources\\";
+        string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
         string winner;
 
 
@@ -176,52 +176,63 @@ namespace Oneillo_2
 
         public void GameTileClicked(object sender, EventArgs e)
         {
-            gameMoves++;
             int RowCLicked = _gameboardGui.GetCurrentRowIndex(sender);
             int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
+            
+            if (boardData[RowCLicked, ColumnClicked] != 0)
+            {
+                // If the user has clicked on a pre-filled tile then we do not want to do anything.
+                return;
+            }
+            
+            gameMoves++;
 
-            if (boardData[RowCLicked, ColumnClicked] == 0)
-            {
-                if (gameMoves % 2 == 0)
-                {
-                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
-                    player = 1;
-                }
-                if (gameMoves % 2 != 0)
-                {
-                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
-                    player = 2;
-                }
-            }
-            if (IsAnyMoveValid(row, col, 0 ,1, isAnyMovePossible))
-            {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-            if (IsAnyMoveValid(row, col, 1, 0, isAnyMovePossible))
+            // if (boardData[RowCLicked, ColumnClicked] == 0)
+            // {
+            //     if (gameMoves % 2 == 0)
+            //     {
+            //         _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
+            //         player = 1;
+            //     }
+            //     if (gameMoves % 2 != 0)
+            //     {
+            //         _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
+            //         player = 2;
+            //     }
+            // }
+            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 0 ,1, isAnyMovePossible))
             {
                 _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
             }
-            if (IsAnyMoveValid(row, col, 1, 1, isAnyMovePossible))
+            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 1, 0, isAnyMovePossible))
             {
                 _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
             }
-            if (IsAnyMoveValid(row, col, -1, 0, isAnyMovePossible))
+            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 1, 1, isAnyMovePossible))
             {
                 _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
             }
-            if (IsAnyMoveValid(row, col, 0, -1, isAnyMovePossible))
+            // if (IsAnyMoveValid(row, col, 0, 0, isAnyMovePossible))
+            // {
+            //     _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            // }
+            if (IsAnyMoveValid(RowCLicked, ColumnClicked, -1, 0, isAnyMovePossible))
             {
                 _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
             }
-            if (IsAnyMoveValid(row, col, -1, 1, isAnyMovePossible))
+            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 0, -1, isAnyMovePossible))
             {
                 _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
             }
-            if (IsAnyMoveValid(row, col, 1, -1, isAnyMovePossible))
+            if (IsAnyMoveValid(RowCLicked, ColumnClicked, -1, 1, isAnyMovePossible))
             {
                 _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
             }
-            if (IsAnyMoveValid(row, col, -1, -1, isAnyMovePossible))
+            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 1, -1, isAnyMovePossible))
+            {
+                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
+            }
+            if (IsAnyMoveValid(RowCLicked, ColumnClicked, -1, -1, isAnyMovePossible))
             {
                 _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
             }
