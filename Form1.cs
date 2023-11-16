@@ -2,6 +2,7 @@ using GameboardGUI;
 using System.Data.Common;
 using System.Numerics;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Oneillo_2
 {
@@ -11,7 +12,7 @@ namespace Oneillo_2
 
         const int rows = 8, columns = 8;
         int[,] boardData;
-        int gameMoves = 0;
+        int gameMoves = 1;
         int row, col, changeInRow, changeInCol;
         int numOfBlack, numOfWhite;
         int player = 1;
@@ -34,7 +35,6 @@ namespace Oneillo_2
                 }
             }
 
-            GameEnded();
             return true;
         }
 
@@ -59,7 +59,7 @@ namespace Oneillo_2
             Point bottom = new Point(10, 10);
             InitializeComponent();
             boardData = this.MakeBoardArray();  // gets the values of board size
-
+            
             try
             {
                 _gameboardGui = new GameboardImageArray(this, boardData, top, bottom, 3, imagepaths); // sets up the board on top of the form
@@ -71,308 +71,212 @@ namespace Oneillo_2
                 DialogResult result = MessageBox.Show("Board Size Too Small! ");  // checks for excpetion
                 this.Close();
             }
+            AddOutline();
         }
         // CLick Listener 
 
-        private void Which_Element_Clicked(object sender, EventArgs e)
+
+
+        private bool IsAnyMoveValid(int RowClicked, int ColumnClicked, int player)
         {
-            int numOfWhite = 0;
-            int numOfBlack = 0;
-            //gets the individual item's row and column
-            int row = boardData.GetLength(0);
-            int column = boardData.GetLength(1);
-
-            //link to function which validates if the move is possible
-            if (boardData[row, column] == 10)
+            (int x, int y)[] OFFSETS =
             {
-                //calls method 8 times for all directions
-                Validator(row, column, 0, 1);
-                Validator(row, column, 1, -1);
-                Validator(row, column, -1, 1);
-                Validator(row, column, 0, -1);
-                Validator(row, column, 1, 0);
-                Validator(row, column, -1, 0);
-                Validator(row, column, -1, -1);
-                Validator(row, column, 1, 1);
+        (1, 0), (1, 1), (0, 1), (-1, 0), (0, -1), (1, -1), (-1, 1), (-1, -1)
+         };
 
-                //changing player
-                if (legalMove == true)
+            foreach (var offset in OFFSETS)
+            {
+                int changeInRow = offset.x;
+                int changeInCol = offset.y;
+
+                int row = RowClicked + changeInRow;
+                int col = ColumnClicked + changeInCol;
+
+                bool isAnyMovePossible = false;
+                int trueCount = 0;
+                List<int> validRow = new List<int>();
+                List<int> validCol = new List<int>();
+                validRow.Add(RowClicked);
+                validCol.Add(ColumnClicked);
+
+                bool sameCounterFound = false;
+
+                while (row >= 0 && row < 8 && col >= 0 && col < 8)
                 {
-                    //we will count the number of each counter in the grid here, and we will display this in labels on the screen
-                    for (int xValCheck0 = 0; xValCheck0 <= 7; xValCheck0++)
+                    if (boardData[row, col] == player)
                     {
-                        for (int yValCheck0 = 0; yValCheck0 <= 7; yValCheck0++)
-                        {
-                            if (boardData[xValCheck0, yValCheck0] == 0)
-                                numOfBlack++;
-                            if (boardData[xValCheck0, yValCheck0] == 1)
-                                numOfWhite++;
-                        }
-
+                        sameCounterFound = true;
+                        break;
                     }
-                    _gameboardGui.SetTile(row, col, 3.ToString());
-                    //prints the number of tokens each player has onto the screen
-                    PlayerOnePieceLbl.Text = numOfBlack.ToString() + "X";
-                    PlayerTwoPieceLbl.Text = numOfWhite.ToString() + "X";
+                    if (boardData[row, col] == 0)
+                    {
+                        break;
+                    }
 
-                    //this changes which player's turn it is and it also changes which label shows
+                    validRow.Add(row);
+                    validCol.Add(col);
 
-
-                    IsGameFinished(numOfBlack, numOfWhite);
-
+                    row += changeInRow;
+                    col += changeInCol;
+                    trueCount++;
                 }
-                //defaults back to false as we use a global
-                legalMove = false;
+
+                if (trueCount >= 1 && sameCounterFound)
+                {
+                    isAnyMovePossible = true;
+                    return isAnyMovePossible;
+                }
             }
+
+            return false;
         }
 
-        private bool IsAnyMoveValid(int row, int col, int changeInRow, int changeInCol, bool isAnyMovePossible)
+        public void AddOutline()
         {
-            int trueCount = 0;
-            //here we are making lists containing the rows and the columns that need colouring in
-            List<int> validRow = new List<int>();
-            List<int> validCol = new List<int>();
-
-            validRow.Add(row);
-            validCol.Add(col);
-            //adding the change in direction to the row to be checked
-            row += changeInRow;
-            col += changeInCol;
-            //a bool for if the same counter as the player is met - helps with the validation
-            bool sameCounterFound;
-            sameCounterFound = false;
-
-
-            //we need to make a while in the bounds of the array so that an error isnt thrown
-            while ((row >= 0) && (row < 8) && (col >= 0) && (col < 8))
+            for (int row = 0; row < 8; row++)
             {
-                //we need to go through each item in the row/col/diagonal in array but we
-                //need to make sure they are not green or the colour of the player
-                if (boardData[row, col] == player)
+                for (int col= 0; col < 8; col++)
                 {
-                    sameCounterFound = true;
-                    break;
-                }
-                if (boardData[row, col] == 0)
-                {
-                    break;
-                }
-                //adding to a list of valid moves which I can later go through-- ones that need colouring
-                //the list will only be gone through if the move is valid
-                validRow.Add(row);
-                validCol.Add(col);
+                    if(IsAnyMoveValid(row, col, player))
+                    {
+                        _gameboardGui.SetTile(row, col, 3.ToString());
+                    }
 
-                row += changeInRow;
-                col += changeInCol;
-                trueCount++;
+                }
+                    
             }
-
-            if ((trueCount >= 1) && (sameCounterFound == true))
-            {
-                isAnyMovePossible = true;
-            }
-            return isAnyMovePossible;
+            
+            
         }
+        // public void AddOutline()
+        // {
+        //     for (int row = 0; row < 8; row++)
+        //     {
+        //         for (int col = 0; col < 8; col++)
+        //         {
+        //           
+        // 
+        //         }
+        // 
+        //     }
+        // 
+        // 
+        // }
 
+        // above is scan 
+        // ADD DISPOSE OF OUTLINES 
+
+        // SCAN BOARD  LIKE ADDOUTLINE() AND THEN REPLACE EACH "3" Value in the board with 0 / NULL
+
+        /
         public void GameTileClicked(object sender, EventArgs e)
-        {
+         {
             int RowCLicked = _gameboardGui.GetCurrentRowIndex(sender);
             int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
-            
-            if (boardData[RowCLicked, ColumnClicked] != 0)
-            {
-                // If the user has clicked on a pre-filled tile then we do not want to do anything.
-                return;
-            }
-            
+
+
             gameMoves++;
-
-            // if (boardData[RowCLicked, ColumnClicked] == 0)
-            // {
-            //     if (gameMoves % 2 == 0)
-            //     {
-            //         _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
-            //         player = 1;
-            //     }
-            //     if (gameMoves % 2 != 0)
-            //     {
-            //         _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
-            //         player = 2;
-            //     }
-            // }
-            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 0 ,1, isAnyMovePossible))
+            if (player == 1)
             {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 1, 0, isAnyMovePossible))
-            {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 1, 1, isAnyMovePossible))
-            {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-            // if (IsAnyMoveValid(row, col, 0, 0, isAnyMovePossible))
-            // {
-            //     _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            // }
-            if (IsAnyMoveValid(RowCLicked, ColumnClicked, -1, 0, isAnyMovePossible))
-            {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 0, -1, isAnyMovePossible))
-            {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-            if (IsAnyMoveValid(RowCLicked, ColumnClicked, -1, 1, isAnyMovePossible))
-            {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-            if (IsAnyMoveValid(RowCLicked, ColumnClicked, 1, -1, isAnyMovePossible))
-            {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-            if (IsAnyMoveValid(RowCLicked, ColumnClicked, -1, -1, isAnyMovePossible))
-            {
-                _gameboardGui.SetTile(RowCLicked, ColumnClicked, 3.ToString());
-            }
-        }
-
-        public void Validator(int row, int col, int changeInRow, int changeInCol)
-        {
-            int trueCount = 0;
-            //here we are making lists containing the rows and the columns that need colouring in
-            List<int> validRow = new List<int>();
-            List<int> validCol = new List<int>();
-
-            validRow.Add(row);
-            validCol.Add(col);
-            //adding the change in direction to the row to be checked
-            row += changeInRow;
-            col += changeInCol;
-            //a bool for if the same counter as the player is met - helps with the validation
-            bool sameCounterFound;
-            sameCounterFound = false;
-
-
-            //we need to make a while in the bounds of the array so that an error isnt thrown
-            while ((row >= 0) && (row < 8) && (col >= 0) && (col < 8))
-            {
-                //we need to go through each item in the row/col/diagonal in array but we
-                //need to make sure they are not green or the colour of the player
-                if (boardData[row, col] == player)
+                if (IsAnyMoveValid(RowCLicked, ColumnClicked, player))
                 {
-                    sameCounterFound = true;
-                    break;
+                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
+                    player = 2;
                 }
-                if (boardData[row, col] == 10)
+            }
+            if (player == 2)
+            {
+                if (IsAnyMoveValid(RowCLicked, ColumnClicked, player))
                 {
-                    break;
-                }
-                if (boardData[row, col] == 3)
-                {
-                    _gameboardGui.SetTile(row, col, 3.ToString());
-                }
-                //adding to a list of valid moves which I can later go through-- ones that need colouring
-                //the list will only be gone through if the move is valid
-                validRow.Add(row);
-                validCol.Add(col);
+                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
+                    player = 1;
 
-                row += changeInRow;
-                col += changeInCol;
-                trueCount++;
+                }
+                
             }
 
-            if ((trueCount >= 1) && (sameCounterFound == true))
+                AddOutline();
+
+
+
+
+
+            void IsGameFinished(int numOfBlack, int numOfWhite)
             {
-                for (int countNumber = 0; countNumber < validRow.Count; countNumber++)
+                bool gameNotWonByFullBoard = false;
+                bool gameNotWonByNoCounters = false;
+                bool isAnyMovePossible = false;
+
+                for (int xWinCheck = 0; xWinCheck <= 7; xWinCheck++)
                 {
-                    boardData[validRow[countNumber], validCol[countNumber]] = player;
+                    for (int yWinCheck = 0; yWinCheck <= 7; yWinCheck++)
+                    {
+                        //checks whether the board is full by counting the green squares
+                        if (boardData[xWinCheck, yWinCheck] == 10)
+                            gameNotWonByFullBoard = true;
+
+                        //Here could I add something which checks whether both players have a counter on the board- use the numofcounters variable
+                        if ((numOfBlack > 0) && (numOfWhite > 0))
+                            gameNotWonByNoCounters = true;
+                    }
                 }
-                _gameboardGui.SetTile(row, col, 3.ToString());
-                _gameboardGui.UpdateBoardGui(boardData);
-                legalMove = true;
+
+                int[,] validMoveArray = new int[8, 8];
+                boardData.CopyTo(validMoveArray, 0);
+
+                //checks whether any move on the board is possible... only runs the method for green squares as only they can be pressed
+
+                _gameboardGui.UpdateBoardGui(validMoveArray);
+
+                //if gameNotWon is not equal to true(IF THE GAME HAS BEEN WON)
+                if ((gameNotWonByFullBoard != true) || (gameNotWonByNoCounters != true))
+                    WinnerCheck(numOfBlack, numOfWhite);
+
+                else if (isAnyMovePossible == false)
+                    ForfeitGame();
+
+                else
+                    return;
             }
-        }
 
-
-
-        void IsGameFinished(int numOfBlack, int numOfWhite)
-        {
-            bool gameNotWonByFullBoard = false;
-            bool gameNotWonByNoCounters = false;
-            bool isAnyMovePossible = false;
-
-            for (int xWinCheck = 0; xWinCheck <= 7; xWinCheck++)
+            void ForfeitGame()  //Function to be completed
             {
-                for (int yWinCheck = 0; yWinCheck <= 7; yWinCheck++)
-                {
-                    //checks whether the board is full by counting the green squares
-                    if (boardData[xWinCheck, yWinCheck] == 10)
-                        gameNotWonByFullBoard = true;
+                _gameboardGui.Dispose();
+                InitializeComponent();
+            }
 
-                    //Here could I add something which checks whether both players have a counter on the board- use the numofcounters variable
-                    if ((numOfBlack > 0) && (numOfWhite > 0))
-                        gameNotWonByNoCounters = true;
+            void GameEnded()
+            {
+                if (int.Parse(PlayerOnePieceLbl.Text) > int.Parse(PlayerTwoPieceLbl.Text))
+                {
+                    MessageBox.Show($"{PlayerOneName.Text} is the winner.");
+                }
+                else if (int.Parse(PlayerOnePieceLbl.Text) == int.Parse(PlayerTwoPieceLbl.Text))
+                {
+                    MessageBox.Show("The game was a draw.");
+                }
+                else
+                {
+                    MessageBox.Show($"{PlayerTwoName.Text} is the winner.");
                 }
             }
 
-            int[,] validMoveArray = new int[8, 8];
-            boardData.CopyTo(validMoveArray, 0);
+            void WinnerCheck(int numOfBlack, int numOfWhite)  //Function to be compketed
+            {
+                if (numOfBlack > numOfWhite)
+                {
+                    winner = "Black";
+                }
+                if (numOfBlack < numOfWhite)
+                {
+                    winner = "White";
+                }
+                else
+                {
+                    winner = "Draw";
+                }
+            }
 
-            //checks whether any move on the board is possible... only runs the method for green squares as only they can be pressed
-
-            _gameboardGui.UpdateBoardGui(validMoveArray);
-
-            //if gameNotWon is not equal to true(IF THE GAME HAS BEEN WON)
-            if ((gameNotWonByFullBoard != true) || (gameNotWonByNoCounters != true))
-                WinnerCheck(numOfBlack, numOfWhite);
-
-            else if (isAnyMovePossible == false)
-                ForfeitGame();
-
-            else
-                return;
         }
-
-        void ForfeitGame()  //Function to be completed
-        {
-            return;
-        }
-
-        private void GameEnded()
-        {
-            if (int.Parse(PlayerOnePieceLbl.Text) > int.Parse(PlayerTwoPieceLbl.Text))
-            {
-                MessageBox.Show($"{PlayerOneName.Text} is the winner.");
-            }
-            else if (int.Parse(PlayerOnePieceLbl.Text) == int.Parse(PlayerTwoPieceLbl.Text))
-            {
-                MessageBox.Show("The game was a draw.");
-            }
-            else
-            {
-                MessageBox.Show($"{PlayerTwoName.Text} is the winner.");
-            }
-        }
-
-        void WinnerCheck(int numOfBlack, int numOfWhite)  //Function to be compketed
-        {
-            if (numOfBlack > numOfWhite)
-            {
-                winner = "Black";
-            }
-            if (numOfBlack < numOfWhite)
-            {
-                winner = "White";
-            }
-            else
-            {
-                winner = "Draw";
-            }
-        }
-
-
-
-    }
+    } 
 }
