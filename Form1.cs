@@ -38,7 +38,6 @@ namespace Oneillo_2
             return true;
         }
 
-
         private int[,] MakeBoardArray()
         {
             int[,] StartArray = new int[rows, columns];
@@ -81,9 +80,9 @@ namespace Oneillo_2
         {
             (int x, int y)[] OFFSETS =
             {
-                (1, 0), (1, 1), 
+                (1, 0), (1, 1),
                 (0, 1), (-1, 0),           // offset co-ordinates
-                (0, -1), (1, -1), 
+                (0, -1), (1, -1),
                 (-1, 1), (-1, -1)
             };
 
@@ -144,7 +143,6 @@ namespace Oneillo_2
                     {
                         _gameboardGui.SetTile(row, col, 3.ToString());
                     }
-
                 }
             }
         }
@@ -162,27 +160,6 @@ namespace Oneillo_2
                 }
             }
         }
-
-        // public void AddOutline()
-        // {
-        //     for (int row = 0; row < 8; row++)
-        //     {
-        //         for (int col = 0; col < 8; col++)
-        //         {
-        //           
-        // 
-        //         }
-        // 
-        //     }
-        // 
-        // 
-        // }
-
-        // above is scan 
-        // ADD DISPOSE OF OUTLINES 
-
-        // SCAN BOARD  LIKE ADDOUTLINE() AND THEN REPLACE EACH "3" Value in the board with 0 / NULL
-
 
         public void GameTileClicked(object sender, EventArgs e)
         {
@@ -206,7 +183,6 @@ namespace Oneillo_2
                         boardData[row, col] = 0;
                         _gameboardGui.UpdateBoardGui(boardData);
                     }
-
                 }
             }
             if (player == 2)
@@ -222,7 +198,6 @@ namespace Oneillo_2
                         boardData[row, col] = 0;
                         _gameboardGui.UpdateBoardGui(boardData);
                     }
-
                 }
             }
             AddOutline();
@@ -302,6 +277,21 @@ namespace Oneillo_2
             {
                 winner = "Draw";
             }
+        }
+
+        private void PlayerOneName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void PlayerOnePieceLbl_Click(object sender, EventArgs e)
+        {
+            PlayerOnePieceLbl.Text = numOfBlack.ToString() + " Black Pieces ";
+        }
+
+        private void PlayerTwoPieceLbl_Click(object sender, EventArgs e)
+        {
+            PlayerTwoPieceLbl.Text = numOfWhite.ToString() + " White Pieces ";
         }
     }
 }

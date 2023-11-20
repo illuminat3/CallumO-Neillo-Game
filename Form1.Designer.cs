@@ -42,6 +42,7 @@
             PlayerOnePieceLbl.Size = new Size(38, 15);
             PlayerOnePieceLbl.TabIndex = 0;
             PlayerOnePieceLbl.Text = "label1";
+            PlayerOnePieceLbl.Click += PlayerOnePieceLbl_Click;
             // 
             // PlayerTwoPieceLbl
             // 
@@ -51,6 +52,7 @@
             PlayerTwoPieceLbl.Size = new Size(38, 15);
             PlayerTwoPieceLbl.TabIndex = 1;
             PlayerTwoPieceLbl.Text = "label1";
+            PlayerTwoPieceLbl.Click += PlayerTwoPieceLbl_Click;
             // 
             // PlayerOneName
             // 
@@ -58,6 +60,7 @@
             PlayerOneName.Name = "PlayerOneName";
             PlayerOneName.Size = new Size(100, 23);
             PlayerOneName.TabIndex = 2;
+            PlayerOneName.TextChanged += PlayerOneName_TextChanged;
             // 
             // PlayerTwoName
             // 
