@@ -59,12 +59,12 @@ namespace Oneillo_2
             Point bottom = new Point(10, 10);
             InitializeComponent();
             boardData = this.MakeBoardArray();  // gets the values of board size
-            
+
             try
             {
                 _gameboardGui = new GameboardImageArray(this, boardData, top, bottom, 3, imagepaths); // sets up the board on top of the form
                 _gameboardGui.TileClicked += new GameboardImageArray.TileClickedEventDelegate(GameTileClicked);
-                //_gameboardGui.UpdateBoardGui(boardData);
+                _gameboardGui.UpdateBoardGui(boardData);
             }
             catch (Exception ex)
             {
@@ -81,8 +81,11 @@ namespace Oneillo_2
         {
             (int x, int y)[] OFFSETS =
             {
-        (1, 0), (1, 1), (0, 1), (-1, 0), (0, -1), (1, -1), (-1, 1), (-1, -1)
-         };
+                (1, 0), (1, 1), 
+                (0, 1), (-1, 0),           // offset co-ordinates
+                (0, -1), (1, -1), 
+                (-1, 1), (-1, -1)
+            };
 
             foreach (var offset in OFFSETS)
             {
@@ -135,33 +138,30 @@ namespace Oneillo_2
         {
             for (int row = 0; row < 8; row++)
             {
-                for (int col= 0; col < 8; col++)
+                for (int col = 0; col < 8; col++)
                 {
-                    if(IsAnyMoveValid(row, col, player))
+                    if (IsAnyMoveValid(row, col, player))
                     {
                         _gameboardGui.SetTile(row, col, 3.ToString());
                     }
 
                 }
-                    
-            }  
+            }
         }
 
         public void ClearPreviousLegalMoves()
         {
             for (int row = 0; row < 8; row++)
-            {
-                for (int col = 0; col < 8; col++)
-                {
-                    if (boardData[row, col] == 3) // Assuming the Tag property contains the identifier
+            {                                                   // CURRENTLY NOT USING THIS 
+                for (int col = 0; col < 8; col++)               // SEE CLICK EVENT TO SEE HOW I'M DISPOSING OF THE OUTLINES
+                {                                               // NEXT STEP IS TO FLIP ALL OF THE COUNTERS THAT SHOULD BE FLIPPED WHEN A LEGAL MOVE IS CLICKED
+                    if (boardData[row, col] == 3)
                     {
-                        _gameboardGui.SetTile(row, col, 0.ToString()); // Change it to the empty square
+                        _gameboardGui.SetTile(row, col, 0.ToString());
                     }
                 }
             }
         }
-
-
 
         // public void AddOutline()
         // {
@@ -185,10 +185,12 @@ namespace Oneillo_2
 
 
         public void GameTileClicked(object sender, EventArgs e)
-         {
+        {
             int RowCLicked = _gameboardGui.GetCurrentRowIndex(sender);
             int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
 
+            boardData[row, col] = 0;
+            _gameboardGui.UpdateBoardGui(boardData);
 
             gameMoves++;
             if (player == 1)
@@ -196,7 +198,15 @@ namespace Oneillo_2
                 if (IsAnyMoveValid(RowCLicked, ColumnClicked, player))
                 {
                     _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
+                    boardData[RowCLicked, ColumnClicked] = 1;
+                    _gameboardGui.UpdateBoardGui(boardData);
                     player = 2;
+                    if (boardData[row, col] == 3)
+                    {
+                        boardData[row, col] = 0;
+                        _gameboardGui.UpdateBoardGui(boardData);
+                    }
+
                 }
             }
             if (player == 2)
@@ -204,91 +214,94 @@ namespace Oneillo_2
                 if (IsAnyMoveValid(RowCLicked, ColumnClicked, player))
                 {
                     _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
+                    boardData[RowCLicked, ColumnClicked] = 2;
+                    _gameboardGui.UpdateBoardGui(boardData);
                     player = 1;
-
-                }
-                
-            }
-
-            ClearPreviousLegalMoves();
-            AddOutline();
-
-            void IsGameFinished(int numOfBlack, int numOfWhite)
-            {
-                bool gameNotWonByFullBoard = false;
-                bool gameNotWonByNoCounters = false;
-                bool isAnyMovePossible = false;
-
-                for (int xWinCheck = 0; xWinCheck <= 7; xWinCheck++)
-                {
-                    for (int yWinCheck = 0; yWinCheck <= 7; yWinCheck++)
+                    if (boardData[row, col] == 3)
                     {
-                        //checks whether the board is full by counting the green squares
-                        if (boardData[xWinCheck, yWinCheck] == 10)
-                            gameNotWonByFullBoard = true;
-
-                        //Here could I add something which checks whether both players have a counter on the board- use the numofcounters variable
-                        if ((numOfBlack > 0) && (numOfWhite > 0))
-                            gameNotWonByNoCounters = true;
+                        boardData[row, col] = 0;
+                        _gameboardGui.UpdateBoardGui(boardData);
                     }
-                }
 
-                int[,] validMoveArray = new int[8, 8];
-                boardData.CopyTo(validMoveArray, 0);
-
-                //checks whether any move on the board is possible... only runs the method for green squares as only they can be pressed
-
-                _gameboardGui.UpdateBoardGui(validMoveArray);
-
-                //if gameNotWon is not equal to true(IF THE GAME HAS BEEN WON)
-                if ((gameNotWonByFullBoard != true) || (gameNotWonByNoCounters != true))
-                    WinnerCheck(numOfBlack, numOfWhite);
-
-                else if (isAnyMovePossible == false)
-                    ForfeitGame();
-
-                else
-                    return;
-            }
-
-            void ForfeitGame()  //Function to be completed
-            {
-                _gameboardGui.Dispose();
-                InitializeComponent();
-            }
-
-            void GameEnded()
-            {
-                if (int.Parse(PlayerOnePieceLbl.Text) > int.Parse(PlayerTwoPieceLbl.Text))
-                {
-                    MessageBox.Show($"{PlayerOneName.Text} is the winner.");
-                }
-                else if (int.Parse(PlayerOnePieceLbl.Text) == int.Parse(PlayerTwoPieceLbl.Text))
-                {
-                    MessageBox.Show("The game was a draw.");
-                }
-                else
-                {
-                    MessageBox.Show($"{PlayerTwoName.Text} is the winner.");
                 }
             }
-
-            void WinnerCheck(int numOfBlack, int numOfWhite)  //Function to be compketed
-            {
-                if (numOfBlack > numOfWhite)
-                {
-                    winner = "Black";
-                }
-                if (numOfBlack < numOfWhite)
-                {
-                    winner = "White";
-                }
-                else
-                {
-                    winner = "Draw";
-                }
-            }
-
+            AddOutline();
         }
-    } 
+
+        void IsGameFinished(int numOfBlack, int numOfWhite)
+        {
+            bool gameNotWonByFullBoard = false;
+            bool gameNotWonByNoCounters = false;
+            bool isAnyMovePossible = false;
+
+            for (int xWinCheck = 0; xWinCheck <= 7; xWinCheck++)
+            {
+                for (int yWinCheck = 0; yWinCheck <= 7; yWinCheck++)
+                {
+                    //checks whether the board is full by counting the green squares
+                    if (boardData[xWinCheck, yWinCheck] == 10)
+                        gameNotWonByFullBoard = true;
+
+                    //Here could I add something which checks whether both players have a counter on the board- use the numofcounters variable
+                    if ((numOfBlack > 0) && (numOfWhite > 0))
+                        gameNotWonByNoCounters = true;
+                }
+            }
+
+            int[,] validMoveArray = new int[8, 8];
+            boardData.CopyTo(validMoveArray, 0);
+
+            //checks whether any move on the board is possible... only runs the method for green squares as only they can be pressed
+
+            _gameboardGui.UpdateBoardGui(validMoveArray);
+
+            //if gameNotWon is not equal to true(IF THE GAME HAS BEEN WON)
+            if ((gameNotWonByFullBoard != true) || (gameNotWonByNoCounters != true))
+                WinnerCheck(numOfBlack, numOfWhite);
+
+            else if (isAnyMovePossible == false)
+                ForfeitGame();
+
+            else
+                return;
+        }
+
+        void ForfeitGame()  //Function to be completed
+        {
+            _gameboardGui.Dispose();
+            InitializeComponent();
+        }
+
+        void GameEnded()
+        {
+            if (int.Parse(PlayerOnePieceLbl.Text) > int.Parse(PlayerTwoPieceLbl.Text))
+            {
+                MessageBox.Show($"{PlayerOneName.Text} is the winner.");
+            }
+            else if (int.Parse(PlayerOnePieceLbl.Text) == int.Parse(PlayerTwoPieceLbl.Text))
+            {
+                MessageBox.Show("The game was a draw.");
+            }
+            else
+            {
+                MessageBox.Show($"{PlayerTwoName.Text} is the winner.");
+            }
+        }
+
+        void WinnerCheck(int numOfBlack, int numOfWhite)  //Function to be compketed
+        {
+            if (numOfBlack > numOfWhite)
+            {
+                winner = "Black";
+            }
+            if (numOfBlack < numOfWhite)
+            {
+                winner = "White";
+            }
+            else
+            {
+                winner = "Draw";
+            }
+        }
+    }
 }
