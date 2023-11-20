@@ -198,6 +198,8 @@ namespace Oneillo_2
                 if (IsAnyMoveValid(RowCLicked, ColumnClicked, player))
                 {
                     _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
+                    boardData[RowCLicked, ColumnClicked] = 1;
+                    _gameboardGui.UpdateBoardGui(boardData);
                     player = 2;
                     if (boardData[row, col] == 3)
                     {
@@ -212,9 +214,15 @@ namespace Oneillo_2
                 if (IsAnyMoveValid(RowCLicked, ColumnClicked, player))
                 {
                     _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
-                    player = 1;
-                    boardData[row, col] = 0;
+                    boardData[RowCLicked, ColumnClicked] = 2;
                     _gameboardGui.UpdateBoardGui(boardData);
+                    player = 1;
+                    if (boardData[row, col] == 3)
+                    {
+                        boardData[row, col] = 0;
+                        _gameboardGui.UpdateBoardGui(boardData);
+                    }
+
                 }
             }
             AddOutline();
