@@ -144,10 +144,25 @@ namespace Oneillo_2
 
                 }
                     
-            }
-            
-            
+            }  
         }
+
+        public void ClearPreviousLegalMoves()
+        {
+            for (int row = 0; row < 8; row++)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    if (boardData[row, col] == 3) // Assuming the Tag property contains the identifier
+                    {
+                        _gameboardGui.SetTile(row, col, 0.ToString()); // Change it to the empty square
+                    }
+                }
+            }
+        }
+
+
+
         // public void AddOutline()
         // {
         //     for (int row = 0; row < 8; row++)
@@ -168,7 +183,7 @@ namespace Oneillo_2
 
         // SCAN BOARD  LIKE ADDOUTLINE() AND THEN REPLACE EACH "3" Value in the board with 0 / NULL
 
-        /
+
         public void GameTileClicked(object sender, EventArgs e)
          {
             int RowCLicked = _gameboardGui.GetCurrentRowIndex(sender);
@@ -195,11 +210,8 @@ namespace Oneillo_2
                 
             }
 
-                AddOutline();
-
-
-
-
+            ClearPreviousLegalMoves();
+            AddOutline();
 
             void IsGameFinished(int numOfBlack, int numOfWhite)
             {
