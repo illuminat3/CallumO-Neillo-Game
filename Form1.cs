@@ -1,8 +1,4 @@
 using GameboardGUI;
-using System.Data.Common;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Oneillo_2
 {
@@ -12,18 +8,12 @@ namespace Oneillo_2
 
         const int rows = 8, columns = 8;
         int[,] boardData;
-        int gameMoves = 1;
-        int row, col, changeInRow, changeInCol;
+        int gameMoves = 1; // implement this in the GUI
         int numOfBlack, numOfWhite;
         int player = 2;
 
         string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
-        string winner;
-
-
-        bool moveIsPossible;
-        bool legalMove;
-        bool isAnyMovePossible;
+        string winner;  // implement this in the GUI
 
         private bool HasGameEnded()
         {
@@ -34,7 +24,6 @@ namespace Oneillo_2
                     return false;
                 }
             }
-
             return true;
         }
 
@@ -123,6 +112,7 @@ namespace Oneillo_2
                 if (validDirection)
                 {
                     // Check if the opponent's counters can be flanked
+
                     row -= changeInRow;
                     col -= changeInCol;
 
