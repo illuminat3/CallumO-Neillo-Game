@@ -15,7 +15,7 @@ namespace Oneillo_2
         int gameMoves = 1;
         int row, col, changeInRow, changeInCol;
         int numOfBlack, numOfWhite;
-        int player = 1;
+        int player = 2;
 
         string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
         string winner;
@@ -76,62 +76,79 @@ namespace Oneillo_2
 
 
 
-        private bool IsAnyMoveValid(int RowClicked, int ColumnClicked, int player)
+        private bool IsAnyMoveValid(int rowClicked, int columnClicked, int player)
         {
+            if (boardData[rowClicked, columnClicked] != 0)
+            {
+                return false; // If the tile is not empty, it's not a valid move
+            }
+
+            int opponent = 3 - player; // Opponent's color
+
             (int x, int y)[] OFFSETS =
             {
-                (1, 0), (1, 1),
-                (0, 1), (-1, 0),           // offset co-ordinates
-                (0, -1), (1, -1),
-                (-1, 1), (-1, -1)
-            };
+        (1, 0), (1, 1),
+        (0, 1), (-1, 0),
+        (0, -1), (1, -1),
+        (-1, 1), (-1, -1)
+    };
+
+            bool isAnyMovePossible = false;
 
             foreach (var offset in OFFSETS)
             {
                 int changeInRow = offset.x;
                 int changeInCol = offset.y;
 
-                int row = RowClicked + changeInRow;
-                int col = ColumnClicked + changeInCol;
+                int row = rowClicked + changeInRow;
+                int col = columnClicked + changeInCol;
 
-                bool isAnyMovePossible = false;
-                int trueCount = 0;
-                List<int> validRow = new List<int>();
-                List<int> validCol = new List<int>();
-                validRow.Add(RowClicked);
-                validCol.Add(ColumnClicked);
+                bool validDirection = false;
 
-                bool sameCounterFound = false;
-
-                while (row >= 0 && row < 8 && col >= 0 && col < 8)
+                while (row >= 0 && row < rows && col >= 0 && col < columns)
                 {
                     if (boardData[row, col] == player)
                     {
-                        sameCounterFound = true;
+                        validDirection = true;
                         break;
                     }
-                    if (boardData[row, col] == 0)
+                    else if (boardData[row, col] == 0 || boardData[row, col] == 3) // 3 could represent valid moves
                     {
                         break;
                     }
 
-                    validRow.Add(row);
-                    validCol.Add(col);
-
                     row += changeInRow;
                     col += changeInCol;
-                    trueCount++;
                 }
 
-                if (trueCount >= 1 && sameCounterFound)
+                if (validDirection)
                 {
-                    isAnyMovePossible = true;
-                    return isAnyMovePossible;
+                    // Check if the opponent's counters can be flanked
+                    row -= changeInRow;
+                    col -= changeInCol;
+
+                    while (row != rowClicked || col != columnClicked)
+                    {
+                        if (boardData[row, col] == opponent)
+                        {
+                            isAnyMovePossible = true;
+                            break;
+                        }
+
+                        row -= changeInRow;
+                        col -= changeInCol;
+                    }
+
+                    if (isAnyMovePossible)
+                    {
+                        break; // Break out if any direction is valid
+                    }
                 }
             }
 
-            return false;
+            return isAnyMovePossible;
         }
+
 
         public void AddOutline()
         {
@@ -146,6 +163,52 @@ namespace Oneillo_2
                 }
             }
         }
+
+        public void FlipValidCounters(int row, int col, int player)
+        {
+            (int x, int y)[] OFFSETS =
+            {
+        (1, 0), (1, 1),
+        (0, 1), (-1, 0),
+        (0, -1), (1, -1),
+        (-1, 1), (-1, -1)
+    };
+
+            int opponent = 3 - player; // Assuming 1 for black, 2 for white
+
+            foreach (var offset in OFFSETS)
+            {
+                int changeInRow = offset.x;
+                int changeInCol = offset.y;
+
+                int r = row + changeInRow;
+                int c = col + changeInCol;
+
+                bool flipped = false;
+
+                while (r >= 0 && r < rows && c >= 0 && c < columns && boardData[r, c] == opponent)
+                {
+                    r += changeInRow;
+                    c += changeInCol;
+                    flipped = true;
+                }
+
+                if (flipped && r >= 0 && r < rows && c >= 0 && c < columns && boardData[r, c] == player)
+                {
+                    // Flip the opponent's tiles
+                    int flipR = row + changeInRow;
+                    int flipC = col + changeInCol;
+
+                    while (flipR != r || flipC != c)
+                    {
+                        boardData[flipR, flipC] = player;
+                        flipR += changeInRow;
+                        flipC += changeInCol;
+                    }
+                }
+            }
+        }
+
 
         public void ClearPreviousLegalMoves()
         {
@@ -163,47 +226,32 @@ namespace Oneillo_2
 
         public void GameTileClicked(object sender, EventArgs e)
         {
-            int RowCLicked = _gameboardGui.GetCurrentRowIndex(sender);
+            int RowClicked = _gameboardGui.GetCurrentRowIndex(sender);
             int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
 
-            boardData[row, col] = 0;
-            _gameboardGui.UpdateBoardGui(boardData);
+            // Clear previous legal moves
+            ClearPreviousLegalMoves();
 
-            gameMoves++;
-            if (player == 1)
+            // Check if the clicked tile is a valid move for the current player
+            if (IsAnyMoveValid(RowClicked, ColumnClicked, player))
             {
-                if (IsAnyMoveValid(RowCLicked, ColumnClicked, player))
-                {
-                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 1.ToString());
-                    boardData[RowCLicked, ColumnClicked] = 1;
-                    _gameboardGui.UpdateBoardGui(boardData);
-                    player = 2;
-                    if (boardData[row, col] == 3)
-                    {
-                        boardData[row, col] = 0;
-                        _gameboardGui.UpdateBoardGui(boardData);
-                    }
-                }
+                // Update the board with the player's move
+                boardData[RowClicked, ColumnClicked] = player;
+
+                // Flip counters
+                FlipValidCounters(RowClicked, ColumnClicked, player);
+
+                _gameboardGui.UpdateBoardGui(boardData);
+
+                // Switch players
+                player = 3 - player; // Assuming 1 for black, 2 for white
             }
-            if (player == 2)
-            {
-                if (IsAnyMoveValid(RowCLicked, ColumnClicked, player))
-                {
-                    _gameboardGui.SetTile(RowCLicked, ColumnClicked, 2.ToString());
-                    boardData[RowCLicked, ColumnClicked] = 2;
-                    _gameboardGui.UpdateBoardGui(boardData);
-                    player = 1;
-                    if (boardData[row, col] == 3)
-                    {
-                        boardData[row, col] = 0;
-                        _gameboardGui.UpdateBoardGui(boardData);
-                    }
-                }
-            }
+
+            // Add outlines for valid moves for the next player
             AddOutline();
         }
 
-        void IsGameFinished(int numOfBlack, int numOfWhite)
+        public void IsGameFinished(int numOfBlack, int numOfWhite)
         {
             bool gameNotWonByFullBoard = false;
             bool gameNotWonByNoCounters = false;
