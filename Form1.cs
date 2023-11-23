@@ -75,7 +75,6 @@ namespace Oneillo_2
         // CLick Listener 
 
 
-
         private bool IsAnyMoveValid(int rowClicked, int columnClicked, int player)
         {
             if (boardData[rowClicked, columnClicked] != 0)
@@ -87,11 +86,11 @@ namespace Oneillo_2
 
             (int x, int y)[] OFFSETS =
             {
-        (1, 0), (1, 1),
-        (0, 1), (-1, 0),
-        (0, -1), (1, -1),
-        (-1, 1), (-1, -1)
-    };
+                (1, 0), (1, 1),
+                (0, 1), (-1, 0),
+                (0, -1), (1, -1),
+                (-1, 1), (-1, -1)
+            };
 
             bool isAnyMovePossible = false;
 
@@ -149,7 +148,6 @@ namespace Oneillo_2
             return isAnyMovePossible;
         }
 
-
         public void AddOutline()
         {
             for (int row = 0; row < 8; row++)
@@ -168,11 +166,11 @@ namespace Oneillo_2
         {
             (int x, int y)[] OFFSETS =
             {
-        (1, 0), (1, 1),
-        (0, 1), (-1, 0),
-        (0, -1), (1, -1),
-        (-1, 1), (-1, -1)
-    };
+                (1, 0), (1, 1),
+                (0, 1), (-1, 0),
+                (0, -1), (1, -1),
+                (-1, 1), (-1, -1)
+            };
 
             int opponent = 3 - player; // Assuming 1 for black, 2 for white
 
@@ -209,13 +207,12 @@ namespace Oneillo_2
             }
         }
 
-
         public void ClearPreviousLegalMoves()
         {
             for (int row = 0; row < 8; row++)
-            {                                                   // CURRENTLY NOT USING THIS 
-                for (int col = 0; col < 8; col++)               // SEE CLICK EVENT TO SEE HOW I'M DISPOSING OF THE OUTLINES
-                {                                               // NEXT STEP IS TO FLIP ALL OF THE COUNTERS THAT SHOULD BE FLIPPED WHEN A LEGAL MOVE IS CLICKED
+            {                                                   
+                for (int col = 0; col < 8; col++)               
+                {                                               
                     if (boardData[row, col] == 3)
                     {
                         _gameboardGui.SetTile(row, col, 0.ToString());
@@ -228,6 +225,8 @@ namespace Oneillo_2
         {
             int RowClicked = _gameboardGui.GetCurrentRowIndex(sender);
             int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
+
+            gameMoves += 1;
 
             // Clear previous legal moves
             ClearPreviousLegalMoves();
@@ -274,7 +273,7 @@ namespace Oneillo_2
             int[,] validMoveArray = new int[8, 8];
             boardData.CopyTo(validMoveArray, 0);
 
-            //checks whether any move on the board is possible... only runs the method for green squares as only they can be pressed
+            //checks whether any move on the board is possible and  only runs the method for green squares as only they can be pressed
 
             _gameboardGui.UpdateBoardGui(validMoveArray);
 
