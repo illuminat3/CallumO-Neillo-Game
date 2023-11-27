@@ -15,18 +15,6 @@ namespace Oneillo_2
         string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
         string winner;  // implement this in the GUI
 
-        private bool HasGameEnded()
-        {
-            foreach (int i in boardData)
-            {
-                if (i == 10)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         private int[,] MakeBoardArray()
         {
             int[,] StartArray = new int[rows, columns];
