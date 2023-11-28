@@ -28,16 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            PlayerOnePieceLbl = new Label();
+            Label PlayerOnePieceLbl;
             PlayerTwoPieceLbl = new Label();
             PlayerOneName = new TextBox();
             PlayerTwoName = new TextBox();
+            PlayerOnePieceLbl = new Label();
             SuspendLayout();
             // 
             // PlayerOnePieceLbl
             // 
             PlayerOnePieceLbl.AutoSize = true;
-            PlayerOnePieceLbl.Location = new Point(136, 740);
+            PlayerOnePieceLbl.Location = new Point(118, 857);
             PlayerOnePieceLbl.Name = "PlayerOnePieceLbl";
             PlayerOnePieceLbl.Size = new Size(38, 15);
             PlayerOnePieceLbl.TabIndex = 0;
@@ -47,7 +48,7 @@
             // PlayerTwoPieceLbl
             // 
             PlayerTwoPieceLbl.AutoSize = true;
-            PlayerTwoPieceLbl.Location = new Point(359, 740);
+            PlayerTwoPieceLbl.Location = new Point(268, 857);
             PlayerTwoPieceLbl.Name = "PlayerTwoPieceLbl";
             PlayerTwoPieceLbl.Size = new Size(38, 15);
             PlayerTwoPieceLbl.TabIndex = 1;
@@ -56,7 +57,7 @@
             // 
             // PlayerOneName
             // 
-            PlayerOneName.Location = new Point(12, 737);
+            PlayerOneName.Location = new Point(12, 849);
             PlayerOneName.Name = "PlayerOneName";
             PlayerOneName.Size = new Size(100, 23);
             PlayerOneName.TabIndex = 2;
@@ -64,7 +65,7 @@
             // 
             // PlayerTwoName
             // 
-            PlayerTwoName.Location = new Point(235, 737);
+            PlayerTwoName.Location = new Point(162, 849);
             PlayerTwoName.Name = "PlayerTwoName";
             PlayerTwoName.Size = new Size(100, 23);
             PlayerTwoName.TabIndex = 3;
@@ -73,12 +74,14 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.DarkBlue;
-            ClientSize = new Size(792, 769);
+            BackColor = Color.SteelBlue;
+            ClientSize = new Size(792, 884);
             Controls.Add(PlayerTwoName);
             Controls.Add(PlayerOneName);
             Controls.Add(PlayerTwoPieceLbl);
             Controls.Add(PlayerOnePieceLbl);
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
