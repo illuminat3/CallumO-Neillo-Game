@@ -128,27 +128,46 @@ namespace Oneillo_2
 
         public void GameEnded()
         {
-            bool hasGameFinished = true; // Initialize as true assuming the game has finished unless proven otherwise
+            bool hasLegalMoves = false;
 
+            // Check for any empty spaces and legal moves
             for (int row = 0; row < 8; row++)
             {
                 for (int col = 0; col < 8; col++)
                 {
-                    if (boardData[row, col] != 3)
+                    if (_gameboardGui.GetTile(row, col).ImageLocation.EndsWith("3.PNG"))
                     {
-                        hasGameFinished = false; // If any cell doesn't have the value 3, the game hasn't finished
+                        hasLegalMoves = true;
                         break;
                     }
                 }
-                if (!hasGameFinished)
-                {
-                    break; // Break the outer loop if the game hasn't finished
-                }
             }
 
-            if (hasGameFinished)
+            // Game end conditions
+            if (hasLegalMoves)
             {
-                MessageBox.Show("Game Won by" + winner + " !!!"); // Show message if the game has finished
+                return;
+            }
+            else
+            {
+                // Calculate the number of black and white pieces
+                CheckNumPieces();
+
+                if (numOfBlack > numOfWhite)
+                {
+                    winner = "Black";
+                    MessageBox.Show("Black Wins! with " + numOfBlack + " counters!" );
+                }
+                else if (numOfBlack < numOfWhite)
+                {
+                    winner = "White";
+                    MessageBox.Show("White Wins! with " + numOfWhite + " counters!");
+                }
+                else
+                {
+                    winner = "Draw";
+                    MessageBox.Show("Draw!");
+                }
             }
         }
 
@@ -228,17 +247,19 @@ namespace Oneillo_2
 
         private void CheckNumPieces()
         {
+            numOfBlack = 0;
+            numOfWhite = 0;
             for (int row = 0; row < 8; row++)
             {
                 for (int col = 0; col < 8; col++)
                 {
                     if (boardData[row, col] == 1)
                     {
-                        numOfBlack += 1;
+                        numOfBlack = numOfBlack + 1;
                     }
                     if (boardData[row, col] == 2)
                     {
-                        numOfWhite += 1;
+                        numOfWhite = numOfWhite + 1;
                     }
                 }
             }
@@ -280,25 +301,6 @@ namespace Oneillo_2
         {
             _gameboardGui.Dispose();
             InitializeComponent();
-        }
-
-        void WinnerCheck(int numOfBlack, int numOfWhite)  //Function to be compketed
-        {
-            if (numOfBlack > numOfWhite)
-            {
-                winner = "Black";
-                MessageBox.Show("Black Wins!");
-            }
-            if (numOfBlack < numOfWhite)
-            {
-                winner = "White";
-                MessageBox.Show("White Wins!");
-            }
-            else
-            {
-                winner = "Draw";
-                MessageBox.Show("Draw!");
-            }
         }
 
         private void PlayerOneName_TextChanged(object sender, EventArgs e)
