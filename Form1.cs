@@ -156,7 +156,7 @@ namespace Oneillo_2
                 if (numOfBlack > numOfWhite)
                 {
                     winner = "Black";
-                    MessageBox.Show("Black Wins! with " + numOfBlack + " counters!" );
+                    MessageBox.Show("Black Wins! with " + numOfBlack + " counters!");
                 }
                 else if (numOfBlack < numOfWhite)
                 {
@@ -308,14 +308,17 @@ namespace Oneillo_2
 
         }
 
-        private void PlayerOnePieceLbl_Click(object sender, EventArgs e)
-        {
-            PlayerOnePieceLbl.Text = numOfBlack.ToString() + " Black Pieces ";
-        }
 
-        private void PlayerTwoPieceLbl_Click(object sender, EventArgs e)
-        {
-            PlayerTwoPieceLbl.Text = numOfWhite.ToString() + " White Pieces ";
-        }
+        //       private void PlayerOnePieceLbl_Click(object sender, EventArgs e)
+        //       {
+        //           PlayerOnePieceLbl.Text = numOfBlack.ToString() + " Black Pieces ";
+        //       }
+        //
+        //       private void PlayerTwoPieceLbl_Click(object sender, EventArgs e)
+        //       {
+        //           PlayerTwoPieceLbl.Text = numOfWhite.ToString() + " White Pieces ";
+        //       }
+
+
     }
 }
