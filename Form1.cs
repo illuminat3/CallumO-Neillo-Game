@@ -41,6 +41,18 @@ namespace Oneillo_2
                 _gameboardGui = new GameboardImageArray(this, boardData, top, bottom, 3, imagepaths); // sets up the board on top of the form
                 _gameboardGui.TileClicked += new GameboardImageArray.TileClickedEventDelegate(GameTileClicked);
                 _gameboardGui.UpdateBoardGui(boardData);
+
+                Height += 100;
+
+                var gBox = new GroupBox
+                {
+                    Height = 100,
+                    Top = Height - 150,
+                    Margin = new Padding(20),
+                    Width = Width - 20
+                };
+
+                this.Controls.Add(gBox);
             }
             catch (Exception ex)
             {

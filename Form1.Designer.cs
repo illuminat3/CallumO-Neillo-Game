@@ -38,7 +38,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Navy;
             ClientSize = new Size(792, 857);
-            Controls.Add(splitContainer1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -51,6 +50,5 @@
 
         #endregion
 
-        private SplitContainer splitContainer1;
     }
 }
