@@ -10,7 +10,7 @@ namespace Oneillo_2
         int[,] boardData;
         int gameMoves = 0; // implement this in the GUI
         int numOfBlack, numOfWhite;
-        int player = 2;
+        int player = 1;
 
         string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
         string winner;  // implement this in the GUI
@@ -19,10 +19,10 @@ namespace Oneillo_2
         {
             int[,] StartArray = new int[rows, columns];
 
-            StartArray[3, 3] = 1;
-            StartArray[4, 4] = 1;
-            StartArray[3, 4] = 2;
-            StartArray[4, 3] = 2;
+            StartArray[3, 3] = 2;
+            StartArray[4, 4] = 2;
+            StartArray[3, 4] = 1;
+            StartArray[4, 3] = 1;
             return StartArray;
         }
 
@@ -32,7 +32,7 @@ namespace Oneillo_2
         {
 
             Point top = new Point(10, 10); // setting up the form size
-            Point bottom = new Point(10, 135);
+            Point bottom = new Point(10, 170);
             InitializeComponent();
             boardData = this.MakeBoardArray();  // gets the values of board size
 
@@ -41,6 +41,9 @@ namespace Oneillo_2
                 _gameboardGui = new GameboardImageArray(this, boardData, top, bottom, 3, imagepaths); // sets up the board on top of the form
                 _gameboardGui.TileClicked += new GameboardImageArray.TileClickedEventDelegate(GameTileClicked);
                 _gameboardGui.UpdateBoardGui(boardData);
+
+                pictureBoxBlkToMove.Visible = true;
+                pictureBoxWhtToMove.Visible = false;
 
                 CheckNumPieces();
                 lblBlack.Text = $"Counters: {numOfBlack}";
@@ -95,7 +98,7 @@ namespace Oneillo_2
                         validDirection = true;
                         break;
                     }
-                    else if (boardData[row, col] == 0 || boardData[row, col] == 3) // 3 could represent valid moves
+                    else if (boardData[row, col] == 0 || boardData[row, col] == 3) // 3 represents valid moves
                     {
                         break;
                     }
@@ -279,6 +282,18 @@ namespace Oneillo_2
 
             gameMoves += 1;
 
+            if (richTextBoxPlayerOne.Text == "")
+            {
+                richTextBoxPlayerOne.Text = "Player #1";
+            }
+            if (richTextBoxPlayerTwo.Text == "")
+            {
+                richTextBoxPlayerTwo.Text = "Player #2";
+            }
+
+            richTextBoxPlayerOne.Enabled = false;
+            richTextBoxPlayerTwo.Enabled = false;
+
             // Clear previous legal moves
             ClearPreviousLegalMoves();
 
@@ -294,7 +309,18 @@ namespace Oneillo_2
                 _gameboardGui.UpdateBoardGui(boardData);
 
                 // Switch players
-                player = 3 - player; // 1 for black, 2 for white
+                player = 3 - player; // 2 for black, 1 for white
+            }
+
+            if (player == 1)
+            {
+                pictureBoxBlkToMove.Visible = true;
+                pictureBoxWhtToMove.Visible = false;
+            }
+            if (player == 2)
+            {
+                pictureBoxWhtToMove.Visible = true;
+                pictureBoxBlkToMove.Visible = false;
             }
 
             // Add outlines for valid moves for the next player
@@ -328,6 +354,11 @@ namespace Oneillo_2
         }
 
         private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
 
         }
