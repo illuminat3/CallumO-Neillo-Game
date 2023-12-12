@@ -8,7 +8,7 @@ namespace Oneillo_2
 
         const int rows = 8, columns = 8;
         int[,] boardData;
-        int gameMoves = 1; // implement this in the GUI
+        int gameMoves = 0; // implement this in the GUI
         int numOfBlack, numOfWhite;
         int player = 2;
 
@@ -32,7 +32,7 @@ namespace Oneillo_2
         {
 
             Point top = new Point(10, 10); // setting up the form size
-            Point bottom = new Point(10, 10);
+            Point bottom = new Point(10, 135);
             InitializeComponent();
             boardData = this.MakeBoardArray();  // gets the values of board size
 
@@ -41,6 +41,13 @@ namespace Oneillo_2
                 _gameboardGui = new GameboardImageArray(this, boardData, top, bottom, 3, imagepaths); // sets up the board on top of the form
                 _gameboardGui.TileClicked += new GameboardImageArray.TileClickedEventDelegate(GameTileClicked);
                 _gameboardGui.UpdateBoardGui(boardData);
+
+                CheckNumPieces();
+                lblBlack.Text = $"Counters: {numOfBlack}";
+                lblWhite.Text = $"Counters: {numOfWhite}";
+
+                lblGameMoves.Text = $"Game Moves: {gameMoves}";
+
             }
             catch (Exception ex)
             {
@@ -245,7 +252,7 @@ namespace Oneillo_2
             }
         }
 
-        private void CheckNumPieces()
+        public void CheckNumPieces()
         {
             numOfBlack = 0;
             numOfWhite = 0;
@@ -253,13 +260,13 @@ namespace Oneillo_2
             {
                 for (int col = 0; col < 8; col++)
                 {
-                    if (boardData[row, col] == 1)
+                    if (_gameboardGui.GetTile(row, col).ImageLocation.EndsWith("1.PNG"))
                     {
-                        numOfBlack = numOfBlack + 1;
+                        numOfBlack += 1;
                     }
-                    if (boardData[row, col] == 2)
+                    if (_gameboardGui.GetTile(row, col).ImageLocation.EndsWith("2.PNG"))
                     {
-                        numOfWhite = numOfWhite + 1;
+                        numOfWhite += 1;
                     }
                 }
             }
@@ -287,11 +294,18 @@ namespace Oneillo_2
                 _gameboardGui.UpdateBoardGui(boardData);
 
                 // Switch players
-                player = 3 - player; // Assuming 1 for black, 2 for white
+                player = 3 - player; // 1 for black, 2 for white
             }
 
             // Add outlines for valid moves for the next player
+
+
             CheckNumPieces();
+            lblBlack.Text = $"Counters: {numOfBlack}";
+            lblWhite.Text = $"Counters: {numOfWhite}";
+
+            lblGameMoves.Text = $"Game Moves: {gameMoves}";
+
             AddOutline();
             GameEnded();
         }
@@ -308,17 +322,14 @@ namespace Oneillo_2
 
         }
 
+        private void label1_Click(object sender, EventArgs e)
+        {
+            lblBlack.Text = $"{PlayerOneName_TextChanged} Counters: {numOfBlack}";
+        }
 
-        //       private void PlayerOnePieceLbl_Click(object sender, EventArgs e)
-        //       {
-        //           PlayerOnePieceLbl.Text = numOfBlack.ToString() + " Black Pieces ";
-        //       }
-        //
-        //       private void PlayerTwoPieceLbl_Click(object sender, EventArgs e)
-        //       {
-        //           PlayerTwoPieceLbl.Text = numOfWhite.ToString() + " White Pieces ";
-        //       }
+        private void label3_Click(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }
