@@ -1,4 +1,5 @@
 using GameboardGUI;
+using System.Text.Json;
 
 namespace Oneillo_2
 {
@@ -31,7 +32,7 @@ namespace Oneillo_2
         public Form1()
         {
 
-            Point top = new Point(10, 10); // setting up the form size
+            Point top = new Point(10, 30); // setting up the form size
             Point bottom = new Point(10, 170);
             InitializeComponent();
             boardData = this.MakeBoardArray();  // gets the values of board size
@@ -284,11 +285,11 @@ namespace Oneillo_2
 
             if (richTextBoxPlayerOne.Text == "")
             {
-                richTextBoxPlayerOne.Text = "Player #1";
+                richTextBoxPlayerOne.Text = "Player #2";
             }
             if (richTextBoxPlayerTwo.Text == "")
             {
-                richTextBoxPlayerTwo.Text = "Player #2";
+                richTextBoxPlayerTwo.Text = "Player #1";
             }
 
             richTextBoxPlayerOne.Enabled = false;
@@ -336,7 +337,6 @@ namespace Oneillo_2
             GameEnded();
         }
 
-
         void ForfeitGame()  //Function to be completed
         {
             _gameboardGui.Dispose();
@@ -350,7 +350,7 @@ namespace Oneillo_2
 
         private void label1_Click(object sender, EventArgs e)
         {
-            lblBlack.Text = $"{PlayerOneName_TextChanged} Counters: {numOfBlack}";
+
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -358,9 +358,52 @@ namespace Oneillo_2
 
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void toolStripButton1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void toolStripLabel1_Click(object sender, EventArgs e)
+        {
+            SaveData data = new SaveData(boardData);
+            string json = JsonSerializer.Serialize(data);
+            // File.WriteAllText(path, json);
+        }
+
+
+        private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            boardData = new int[rows, columns];
+
+            boardData[3, 3] = 2;
+            boardData[4, 4] = 2;
+            boardData[3, 4] = 1;
+            boardData[4, 3] = 1;
+
+            gameMoves = 0;
+            numOfBlack = 2;
+            numOfWhite = 2;
+            player = 1;
+
+            winner = string.Empty;  // implement this in the GUI
+
+            _gameboardGui.UpdateBoardGui(boardData);
+
+            lblGameMoves.Text = $"Game Moves: {gameMoves}";
+
+            CheckNumPieces();
+
+            lblBlack.Text = $"Counters: {numOfBlack}";
+            lblWhite.Text = $"Counters: {numOfWhite}";
+            lblGameMoves.Text = $"Game Moves: {gameMoves}";
+
+            richTextBoxPlayerOne.Text = string.Empty;
+            richTextBoxPlayerTwo.Text = string.Empty;
+
+            richTextBoxPlayerOne.Enabled = true;
+            richTextBoxPlayerTwo.Enabled = true;
+
+            AddOutline();
         }
     }
 }

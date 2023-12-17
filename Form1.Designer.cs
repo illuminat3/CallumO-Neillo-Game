@@ -38,10 +38,16 @@
             pictureBoxWhtToMove = new PictureBox();
             richTextBoxPlayerOne = new RichTextBox();
             richTextBoxPlayerTwo = new RichTextBox();
+            toolStrip1 = new ToolStrip();
+            toolStripDropDownButtonGame = new ToolStripDropDownButton();
+            newGameToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSave = new ToolStripLabel();
+            toolStripHelp = new ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxBlkToMove).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxWhtToMove).BeginInit();
+            toolStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // pictureBox1
@@ -52,7 +58,6 @@
             pictureBox1.Size = new Size(120, 112);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
-            pictureBox1.Click += pictureBox1_Click;
             // 
             // pictureBox2
             // 
@@ -80,7 +85,7 @@
             lblWhite.AutoSize = true;
             lblWhite.Font = new Font("Verdana", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
             lblWhite.ForeColor = SystemColors.ControlLightLight;
-            lblWhite.Location = new Point(511, 771);
+            lblWhite.Location = new Point(463, 771);
             lblWhite.Name = "lblWhite";
             lblWhite.Size = new Size(84, 25);
             lblWhite.TabIndex = 3;
@@ -91,7 +96,7 @@
             lblGameMoves.AutoSize = true;
             lblGameMoves.Font = new Font("Verdana", 12F, FontStyle.Bold, GraphicsUnit.Point);
             lblGameMoves.ForeColor = Color.Pink;
-            lblGameMoves.Location = new Point(341, 847);
+            lblGameMoves.Location = new Point(332, 844);
             lblGameMoves.Name = "lblGameMoves";
             lblGameMoves.Size = new Size(60, 18);
             lblGameMoves.TabIndex = 4;
@@ -102,7 +107,7 @@
             // 
             pictureBoxBlkToMove.Image = (Image)resources.GetObject("pictureBoxBlkToMove.Image");
             pictureBoxBlkToMove.InitialImage = (Image)resources.GetObject("pictureBoxBlkToMove.InitialImage");
-            pictureBoxBlkToMove.Location = new Point(16, 706);
+            pictureBoxBlkToMove.Location = new Point(12, 706);
             pictureBoxBlkToMove.Name = "pictureBoxBlkToMove";
             pictureBoxBlkToMove.Size = new Size(132, 115);
             pictureBoxBlkToMove.TabIndex = 5;
@@ -130,11 +135,51 @@
             // richTextBoxPlayerTwo
             // 
             richTextBoxPlayerTwo.Font = new Font("Verdana", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            richTextBoxPlayerTwo.Location = new Point(16, 833);
+            richTextBoxPlayerTwo.Location = new Point(16, 836);
             richTextBoxPlayerTwo.Name = "richTextBoxPlayerTwo";
-            richTextBoxPlayerTwo.Size = new Size(250, 29);
+            richTextBoxPlayerTwo.Size = new Size(250, 26);
             richTextBoxPlayerTwo.TabIndex = 8;
             richTextBoxPlayerTwo.Text = "";
+            // 
+            // toolStrip1
+            // 
+            toolStrip1.BackColor = Color.LightSteelBlue;
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButtonGame, toolStripSave, toolStripHelp });
+            toolStrip1.Location = new Point(0, 0);
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.Size = new Size(792, 25);
+            toolStrip1.TabIndex = 9;
+            toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripDropDownButtonGame
+            // 
+            toolStripDropDownButtonGame.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButtonGame.DropDownItems.AddRange(new ToolStripItem[] { newGameToolStripMenuItem });
+            toolStripDropDownButtonGame.Image = (Image)resources.GetObject("toolStripDropDownButtonGame.Image");
+            toolStripDropDownButtonGame.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButtonGame.Name = "toolStripDropDownButtonGame";
+            toolStripDropDownButtonGame.Size = new Size(51, 22);
+            toolStripDropDownButtonGame.Text = "Game";
+            // 
+            // newGameToolStripMenuItem
+            // 
+            newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
+            newGameToolStripMenuItem.Size = new Size(132, 22);
+            newGameToolStripMenuItem.Text = "New Game";
+            newGameToolStripMenuItem.Click += newGameToolStripMenuItem_Click;
+            // 
+            // toolStripSave
+            // 
+            toolStripSave.Name = "toolStripSave";
+            toolStripSave.Size = new Size(31, 22);
+            toolStripSave.Text = "Save";
+            toolStripSave.Click += toolStripLabel1_Click;
+            // 
+            // toolStripHelp
+            // 
+            toolStripHelp.Name = "toolStripHelp";
+            toolStripHelp.Size = new Size(32, 22);
+            toolStripHelp.Text = "Help";
             // 
             // Form1
             // 
@@ -142,6 +187,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Navy;
             ClientSize = new Size(792, 874);
+            Controls.Add(toolStrip1);
             Controls.Add(richTextBoxPlayerTwo);
             Controls.Add(richTextBoxPlayerOne);
             Controls.Add(pictureBoxWhtToMove);
@@ -151,6 +197,7 @@
             Controls.Add(lblBlack);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox1);
+            DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
@@ -162,6 +209,8 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxBlkToMove).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxWhtToMove).EndInit();
+            toolStrip1.ResumeLayout(false);
+            toolStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -177,5 +226,10 @@
         private PictureBox pictureBoxWhtToMove;
         private RichTextBox richTextBoxPlayerOne;
         private RichTextBox richTextBoxPlayerTwo;
+        private ToolStrip toolStrip1;
+        private ToolStripLabel toolStripSave;
+        private ToolStripLabel toolStripHelp;
+        private ToolStripDropDownButton toolStripDropDownButtonGame;
+        private ToolStripMenuItem newGameToolStripMenuItem;
     }
 }
