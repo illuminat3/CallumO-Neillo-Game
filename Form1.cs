@@ -405,5 +405,10 @@ namespace Oneillo_2
 
             AddOutline();
         }
+
+        private void toolStripHelp_Click(object sender, EventArgs e)
+        {
+            Form helpWindow = new Form();
+        }
     }
 }

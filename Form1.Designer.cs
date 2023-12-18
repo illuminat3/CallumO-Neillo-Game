@@ -180,6 +180,7 @@
             toolStripHelp.Name = "toolStripHelp";
             toolStripHelp.Size = new Size(32, 22);
             toolStripHelp.Text = "Help";
+            toolStripHelp.Click += toolStripHelp_Click;
             // 
             // Form1
             // 
