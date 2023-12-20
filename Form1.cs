@@ -365,9 +365,9 @@ namespace Oneillo_2
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
         {
-            SaveData data = new SaveData(boardData);
-            string json = JsonSerializer.Serialize(data);
-            // File.WriteAllText(path, json);
+        //    SaveData data = new SaveData(boardData);
+        //    string json = JsonSerializer.Serialize(data);
+        //    File.WriteAllText(path, json);
         }
 
 
@@ -406,9 +406,12 @@ namespace Oneillo_2
             AddOutline();
         }
 
-        private void toolStripHelp_Click(object sender, EventArgs e)
+        private void helpPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form helpWindow = new Form();
+
+            Form2 helpForm = new Form2();
+            helpForm.Show();
+            
         }
     }
 }

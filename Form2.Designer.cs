@@ -28,22 +28,87 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2));
+            pictureBox1 = new PictureBox();
+            labelOneilloHelp = new Label();
+            label1 = new Label();
+            richTextBox1 = new RichTextBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(313, 107);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(542, 565);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 0;
+            pictureBox1.TabStop = false;
+            // 
+            // labelOneilloHelp
+            // 
+            labelOneilloHelp.AutoSize = true;
+            labelOneilloHelp.BackColor = Color.Transparent;
+            labelOneilloHelp.Font = new Font("Verdana", 26.25F, FontStyle.Bold, GraphicsUnit.Point);
+            labelOneilloHelp.ForeColor = Color.Navy;
+            labelOneilloHelp.Location = new Point(223, 19);
+            labelOneilloHelp.Name = "labelOneilloHelp";
+            labelOneilloHelp.Size = new Size(381, 42);
+            labelOneilloHelp.TabIndex = 1;
+            labelOneilloHelp.Text = "O'Neillo Help Page";
+            labelOneilloHelp.Click += label1_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Verdana", 18F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Location = new Point(12, 93);
+            label1.Name = "label1";
+            label1.Size = new Size(286, 29);
+            label1.TabIndex = 2;
+            label1.Text = "How to Play O'Neillo";
+            label1.Click += label1_Click_1;
+            // 
+            // richTextBox1
+            // 
+            richTextBox1.BackColor = Color.Beige;
+            richTextBox1.BorderStyle = BorderStyle.None;
+            richTextBox1.EnableAutoDragDrop = true;
+            richTextBox1.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            richTextBox1.Location = new Point(12, 136);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(269, 587);
+            richTextBox1.TabIndex = 3;
+            richTextBox1.Text = resources.GetString("richTextBox1.Text");
             // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Gainsboro;
+            BackColor = Color.Beige;
             ClientSize = new Size(855, 721);
+            Controls.Add(richTextBox1);
+            Controls.Add(label1);
+            Controls.Add(labelOneilloHelp);
+            Controls.Add(pictureBox1);
+            FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "Form2";
             ShowInTaskbar = false;
+            SizeGripStyle = SizeGripStyle.Hide;
             Text = "Form2";
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private PictureBox pictureBox1;
+        private Label labelOneilloHelp;
+        private Label label1;
+        private RichTextBox richTextBox1;
     }
 }

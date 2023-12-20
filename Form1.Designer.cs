@@ -42,7 +42,8 @@
             toolStripDropDownButtonGame = new ToolStripDropDownButton();
             newGameToolStripMenuItem = new ToolStripMenuItem();
             toolStripSave = new ToolStripLabel();
-            toolStripHelp = new ToolStripLabel();
+            toolStripDropDownButtonHelp = new ToolStripDropDownButton();
+            helpPageToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxBlkToMove).BeginInit();
@@ -144,7 +145,7 @@
             // toolStrip1
             // 
             toolStrip1.BackColor = Color.LightSteelBlue;
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButtonGame, toolStripSave, toolStripHelp });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButtonGame, toolStripSave, toolStripDropDownButtonHelp });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(792, 25);
@@ -164,7 +165,7 @@
             // newGameToolStripMenuItem
             // 
             newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
-            newGameToolStripMenuItem.Size = new Size(132, 22);
+            newGameToolStripMenuItem.Size = new Size(180, 22);
             newGameToolStripMenuItem.Text = "New Game";
             newGameToolStripMenuItem.Click += newGameToolStripMenuItem_Click;
             // 
@@ -175,12 +176,23 @@
             toolStripSave.Text = "Save";
             toolStripSave.Click += toolStripLabel1_Click;
             // 
-            // toolStripHelp
+            // toolStripDropDownButtonHelp
             // 
-            toolStripHelp.Name = "toolStripHelp";
-            toolStripHelp.Size = new Size(32, 22);
-            toolStripHelp.Text = "Help";
-            toolStripHelp.Click += toolStripHelp_Click;
+            toolStripDropDownButtonHelp.BackgroundImageLayout = ImageLayout.Center;
+            toolStripDropDownButtonHelp.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButtonHelp.DropDownItems.AddRange(new ToolStripItem[] { helpPageToolStripMenuItem });
+            toolStripDropDownButtonHelp.Image = (Image)resources.GetObject("toolStripDropDownButtonHelp.Image");
+            toolStripDropDownButtonHelp.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButtonHelp.Name = "toolStripDropDownButtonHelp";
+            toolStripDropDownButtonHelp.Size = new Size(45, 22);
+            toolStripDropDownButtonHelp.Text = "Help";
+            // 
+            // helpPageToolStripMenuItem
+            // 
+            helpPageToolStripMenuItem.Name = "helpPageToolStripMenuItem";
+            helpPageToolStripMenuItem.Size = new Size(180, 22);
+            helpPageToolStripMenuItem.Text = "Help Page";
+            helpPageToolStripMenuItem.Click += helpPageToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -229,8 +241,9 @@
         private RichTextBox richTextBoxPlayerTwo;
         private ToolStrip toolStrip1;
         private ToolStripLabel toolStripSave;
-        private ToolStripLabel toolStripHelp;
         private ToolStripDropDownButton toolStripDropDownButtonGame;
         private ToolStripMenuItem newGameToolStripMenuItem;
+        private ToolStripDropDownButton toolStripDropDownButtonHelp;
+        private ToolStripMenuItem helpPageToolStripMenuItem;
     }
 }
