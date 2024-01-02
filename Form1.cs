@@ -197,7 +197,6 @@ namespace Oneillo_2
                     MessageBox.Show("Draw!");
                 }
             }
-
         }
 
 
@@ -298,34 +297,29 @@ namespace Oneillo_2
         {
             int RowClicked = _gameboardGui.GetCurrentRowIndex(sender);
             int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
-            
-            if (speak)
-            {
-                SpeakPlayer();
-            }
 
-            gameMoves += 1;
-
-            if (richTextBoxPlayerOne.Text == "")
-            {
-                richTextBoxPlayerOne.Text = "Player #2";
-                playerOneName = richTextBoxPlayerOne.Text;
-            }
             if (richTextBoxPlayerTwo.Text == "")
             {
-                richTextBoxPlayerTwo.Text = "Player #1";
-                playerTwoName = richTextBoxPlayerTwo.Text;
+                richTextBoxPlayerTwo.Text = "Player #2";
+                playerOneName = richTextBoxPlayerTwo.Text;
+            }
+            if (richTextBoxPlayerOne.Text == "")
+            {
+                richTextBoxPlayerOne.Text = "Player #1";
+                playerTwoName = richTextBoxPlayerOne.Text;
             }
 
-            richTextBoxPlayerOne.Enabled = false;
             richTextBoxPlayerTwo.Enabled = false;
+            richTextBoxPlayerOne.Enabled = false;
 
             // Clear previous legal moves
             ClearPreviousLegalMoves();
 
             // Check if the clicked tile is a valid move for the current player
             if (IsAnyMoveValid(RowClicked, ColumnClicked, player))
-            {
+            { 
+                gameMoves += 1;
+
                 // Update the board with the player's move
                 boardData[RowClicked, ColumnClicked] = player;
 
@@ -336,31 +330,32 @@ namespace Oneillo_2
 
                 // Switch players
                 player = 3 - player; // 2 for black, 1 for white
-            }
 
-            if (onOff % 2 == 0)      // only can be displayed when game info panel has not beem hidden 
-            {
-                if (player == 1)
+                if (onOff % 2 == 0)      // only can be displayed when game info panel has not beem hidden 
                 {
-                    pictureBoxBlkToMove.Visible = true;
-                    pictureBoxWhtToMove.Visible = false;
+                    if (player == 1)
+                    {
+                        pictureBoxBlkToMove.Visible = true;
+                        pictureBoxWhtToMove.Visible = false;
+                    }
+                    if (player == 2)                            // Add outlines for valid moves for the next player
+                    {
+                        pictureBoxWhtToMove.Visible = true;
+                        pictureBoxBlkToMove.Visible = false;
+                    }
                 }
-                if (player == 2)
+
+                CheckNumPieces();
+                lblBlack.Text = $"Counters: {numOfBlack}";
+                lblWhite.Text = $"Counters: {numOfWhite}";
+
+                lblGameMoves.Text = $"Game Moves: {gameMoves}";
+
+                if (speak)
                 {
-                    pictureBoxWhtToMove.Visible = true;
-                    pictureBoxBlkToMove.Visible = false;
+                    SpeakPlayer();
                 }
             }
-
-            // Add outlines for valid moves for the next player
-
-
-            CheckNumPieces();
-            lblBlack.Text = $"Counters: {numOfBlack}";
-            lblWhite.Text = $"Counters: {numOfWhite}";
-
-            lblGameMoves.Text = $"Game Moves: {gameMoves}";
-
             AddOutline();
             GameEnded();
         }
@@ -421,11 +416,11 @@ namespace Oneillo_2
             lblWhite.Text = $"Counters: {numOfWhite}";
             lblGameMoves.Text = $"Game Moves: {gameMoves}";
 
-            richTextBoxPlayerOne.Text = string.Empty;
             richTextBoxPlayerTwo.Text = string.Empty;
+            richTextBoxPlayerOne.Text = string.Empty;
 
-            richTextBoxPlayerOne.Enabled = true;
             richTextBoxPlayerTwo.Enabled = true;
+            richTextBoxPlayerOne.Enabled = true;
 
             AddOutline();
         }
@@ -449,7 +444,6 @@ namespace Oneillo_2
         {
             // Load all games into a list, allow the user to select the game from the list, use indexes and not name checking like other people (harrison and uzair)
 
-
             string filepath = "GameData/Game_Data.JSON";
 
             string json = File.ReadAllText(filepath);
@@ -467,8 +461,8 @@ namespace Oneillo_2
             lblGameMoves.Visible = false;
             lblBlack.Visible = false;               // need to do this because of the way the form is divided to stop the squares taking up the whole screen
             lblWhite.Visible = false;
-            richTextBoxPlayerOne.Visible = false;
             richTextBoxPlayerTwo.Visible = false;
+            richTextBoxPlayerOne.Visible = false;
 
         }
         private void ShowGameInfoPanelProperties()
@@ -478,10 +472,10 @@ namespace Oneillo_2
             pictureBox1.Visible = true;             // enables visibility when 'show' clicked again
             pictureBox2.Visible = true;
             lblGameMoves.Visible = true;
-            lblBlack.Visible = true;
             lblWhite.Visible = true;
-            richTextBoxPlayerOne.Visible = true;
             richTextBoxPlayerTwo.Visible = true;
+            lblBlack.Visible = true;
+            richTextBoxPlayerOne.Visible = true;
 
         }
 
@@ -502,8 +496,18 @@ namespace Oneillo_2
 
         private void SpeakPlayer()
         {
-            string speakPlayerTurn = $"{player} to move";
-            synthesizer.Speak(speakPlayerTurn);
+            string speakPlayerTurn;
+
+            if (player == 1)
+            {
+                speakPlayerTurn = $"{richTextBoxPlayerOne.Text} to move";
+            }
+            else
+            {
+                speakPlayerTurn = $"{richTextBoxPlayerTwo.Text} to move";
+            }
+
+            synthesizer.SpeakAsync(speakPlayerTurn);
         }
 
         private void speakToolStripMenuItem_Click(object sender, EventArgs e)

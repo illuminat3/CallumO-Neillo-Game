@@ -36,8 +36,8 @@
             lblGameMoves = new Label();
             pictureBoxBlkToMove = new PictureBox();
             pictureBoxWhtToMove = new PictureBox();
-            richTextBoxPlayerOne = new RichTextBox();
             richTextBoxPlayerTwo = new RichTextBox();
+            richTextBoxPlayerOne = new RichTextBox();
             toolStrip1 = new ToolStrip();
             toolStripDropDownButtonGame = new ToolStripDropDownButton();
             newGameToolStripMenuItem = new ToolStripMenuItem();
@@ -126,23 +126,23 @@
             pictureBoxWhtToMove.TabIndex = 6;
             pictureBoxWhtToMove.TabStop = false;
             // 
-            // richTextBoxPlayerOne
-            // 
-            richTextBoxPlayerOne.Font = new Font("Verdana", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            richTextBoxPlayerOne.Location = new Point(530, 836);
-            richTextBoxPlayerOne.Name = "richTextBoxPlayerOne";
-            richTextBoxPlayerOne.Size = new Size(250, 26);
-            richTextBoxPlayerOne.TabIndex = 7;
-            richTextBoxPlayerOne.Text = "";
-            // 
             // richTextBoxPlayerTwo
             // 
             richTextBoxPlayerTwo.Font = new Font("Verdana", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            richTextBoxPlayerTwo.Location = new Point(16, 836);
+            richTextBoxPlayerTwo.Location = new Point(530, 836);
             richTextBoxPlayerTwo.Name = "richTextBoxPlayerTwo";
             richTextBoxPlayerTwo.Size = new Size(250, 26);
-            richTextBoxPlayerTwo.TabIndex = 8;
+            richTextBoxPlayerTwo.TabIndex = 7;
             richTextBoxPlayerTwo.Text = "";
+            // 
+            // richTextBoxPlayerOne
+            // 
+            richTextBoxPlayerOne.Font = new Font("Verdana", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            richTextBoxPlayerOne.Location = new Point(12, 836);
+            richTextBoxPlayerOne.Name = "richTextBoxPlayerOne";
+            richTextBoxPlayerOne.Size = new Size(250, 26);
+            richTextBoxPlayerOne.TabIndex = 8;
+            richTextBoxPlayerOne.Text = "";
             // 
             // toolStrip1
             // 
@@ -216,14 +216,14 @@
             // hideGameInfoToolStripMenuItem
             // 
             hideGameInfoToolStripMenuItem.Name = "hideGameInfoToolStripMenuItem";
-            hideGameInfoToolStripMenuItem.Size = new Size(180, 22);
+            hideGameInfoToolStripMenuItem.Size = new Size(157, 22);
             hideGameInfoToolStripMenuItem.Text = "Hide Game Info";
             hideGameInfoToolStripMenuItem.Click += hideGameInfoToolStripMenuItem_Click;
             // 
             // speakToolStripMenuItem
             // 
             speakToolStripMenuItem.Name = "speakToolStripMenuItem";
-            speakToolStripMenuItem.Size = new Size(180, 22);
+            speakToolStripMenuItem.Size = new Size(157, 22);
             speakToolStripMenuItem.Text = "Speak";
             speakToolStripMenuItem.Click += speakToolStripMenuItem_Click;
             // 
@@ -234,8 +234,8 @@
             BackColor = Color.Navy;
             ClientSize = new Size(792, 874);
             Controls.Add(toolStrip1);
-            Controls.Add(richTextBoxPlayerTwo);
             Controls.Add(richTextBoxPlayerOne);
+            Controls.Add(richTextBoxPlayerTwo);
             Controls.Add(pictureBoxWhtToMove);
             Controls.Add(pictureBoxBlkToMove);
             Controls.Add(lblGameMoves);
@@ -270,8 +270,8 @@
         private Label lblGameMoves;
         private PictureBox pictureBoxBlkToMove;
         private PictureBox pictureBoxWhtToMove;
-        private RichTextBox richTextBoxPlayerOne;
         private RichTextBox richTextBoxPlayerTwo;
+        private RichTextBox richTextBoxPlayerOne;
         private ToolStrip toolStrip1;
         private ToolStripDropDownButton toolStripDropDownButtonGame;
         private ToolStripMenuItem newGameToolStripMenuItem;
