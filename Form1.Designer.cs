@@ -41,9 +41,10 @@
             toolStrip1 = new ToolStrip();
             toolStripDropDownButtonGame = new ToolStripDropDownButton();
             newGameToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSave = new ToolStripLabel();
             toolStripDropDownButtonHelp = new ToolStripDropDownButton();
             helpPageToolStripMenuItem = new ToolStripMenuItem();
+            saveGameToolStripMenuItem = new ToolStripMenuItem();
+            loadGameToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxBlkToMove).BeginInit();
@@ -79,7 +80,6 @@
             lblBlack.Size = new Size(84, 25);
             lblBlack.TabIndex = 2;
             lblBlack.Text = "label1";
-            lblBlack.Click += label1_Click;
             // 
             // lblWhite
             // 
@@ -102,7 +102,6 @@
             lblGameMoves.Size = new Size(60, 18);
             lblGameMoves.TabIndex = 4;
             lblGameMoves.Text = "label3";
-            lblGameMoves.Click += label3_Click;
             // 
             // pictureBoxBlkToMove
             // 
@@ -145,7 +144,7 @@
             // toolStrip1
             // 
             toolStrip1.BackColor = Color.LightSteelBlue;
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButtonGame, toolStripSave, toolStripDropDownButtonHelp });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButtonGame, toolStripDropDownButtonHelp });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(792, 25);
@@ -155,7 +154,7 @@
             // toolStripDropDownButtonGame
             // 
             toolStripDropDownButtonGame.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripDropDownButtonGame.DropDownItems.AddRange(new ToolStripItem[] { newGameToolStripMenuItem });
+            toolStripDropDownButtonGame.DropDownItems.AddRange(new ToolStripItem[] { newGameToolStripMenuItem, saveGameToolStripMenuItem, loadGameToolStripMenuItem });
             toolStripDropDownButtonGame.Image = (Image)resources.GetObject("toolStripDropDownButtonGame.Image");
             toolStripDropDownButtonGame.ImageTransparentColor = Color.Magenta;
             toolStripDropDownButtonGame.Name = "toolStripDropDownButtonGame";
@@ -168,13 +167,6 @@
             newGameToolStripMenuItem.Size = new Size(180, 22);
             newGameToolStripMenuItem.Text = "New Game";
             newGameToolStripMenuItem.Click += newGameToolStripMenuItem_Click;
-            // 
-            // toolStripSave
-            // 
-            toolStripSave.Name = "toolStripSave";
-            toolStripSave.Size = new Size(31, 22);
-            toolStripSave.Text = "Save";
-            toolStripSave.Click += toolStripLabel1_Click;
             // 
             // toolStripDropDownButtonHelp
             // 
@@ -193,6 +185,20 @@
             helpPageToolStripMenuItem.Size = new Size(180, 22);
             helpPageToolStripMenuItem.Text = "Help Page";
             helpPageToolStripMenuItem.Click += helpPageToolStripMenuItem_Click;
+            // 
+            // saveGameToolStripMenuItem
+            // 
+            saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
+            saveGameToolStripMenuItem.Size = new Size(180, 22);
+            saveGameToolStripMenuItem.Text = "Save Game";
+            saveGameToolStripMenuItem.Click += saveGameToolStripMenuItem_Click;
+            // 
+            // loadGameToolStripMenuItem
+            // 
+            loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
+            loadGameToolStripMenuItem.Size = new Size(180, 22);
+            loadGameToolStripMenuItem.Text = "Load Game";
+            loadGameToolStripMenuItem.Click += LoadGameButton_Click;
             // 
             // Form1
             // 
@@ -240,10 +246,11 @@
         private RichTextBox richTextBoxPlayerOne;
         private RichTextBox richTextBoxPlayerTwo;
         private ToolStrip toolStrip1;
-        private ToolStripLabel toolStripSave;
         private ToolStripDropDownButton toolStripDropDownButtonGame;
         private ToolStripMenuItem newGameToolStripMenuItem;
         private ToolStripDropDownButton toolStripDropDownButtonHelp;
         private ToolStripMenuItem helpPageToolStripMenuItem;
+        private ToolStripMenuItem saveGameToolStripMenuItem;
+        private ToolStripMenuItem loadGameToolStripMenuItem;
     }
 }

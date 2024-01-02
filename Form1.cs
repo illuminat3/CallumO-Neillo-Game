@@ -1,5 +1,6 @@
 using GameboardGUI;
-using System.Text.Json;
+using Newtonsoft.Json;
+using System.Runtime.CompilerServices;
 
 namespace Oneillo_2
 {
@@ -15,6 +16,8 @@ namespace Oneillo_2
 
         string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
         string winner;  // implement this in the GUI
+        string playerOneName;
+        string playerTwoName;
 
         private int[,] MakeBoardArray()
         {
@@ -26,7 +29,6 @@ namespace Oneillo_2
             StartArray[4, 3] = 1;
             return StartArray;
         }
-
         // On start setup board data.
 
         public Form1()
@@ -180,6 +182,7 @@ namespace Oneillo_2
                     MessageBox.Show("Draw!");
                 }
             }
+
         }
 
 
@@ -286,10 +289,12 @@ namespace Oneillo_2
             if (richTextBoxPlayerOne.Text == "")
             {
                 richTextBoxPlayerOne.Text = "Player #2";
+                playerOneName = richTextBoxPlayerOne.Text;
             }
             if (richTextBoxPlayerTwo.Text == "")
             {
                 richTextBoxPlayerTwo.Text = "Player #1";
+                playerTwoName = richTextBoxPlayerTwo.Text;
             }
 
             richTextBoxPlayerOne.Enabled = false;
@@ -337,37 +342,35 @@ namespace Oneillo_2
             GameEnded();
         }
 
+        public void SaveGame(GameState gameState)
+        {
+            string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
+
+            string filePath = "GameData/Game_Data.JSON";
+
+            File.WriteAllText(filePath, json);
+        }
+
+        // Method triggered when the user clicks a "Load Game" button
+        private void LoadGameButton_Click(object sender, EventArgs e)
+        {
+            GameState loadSavedGameState = LoadGameState();
+            boardData = loadSavedGameState.boardData;
+            playerOneName = loadSavedGameState.playerOneName;
+            playerTwoName = loadSavedGameState.playerTwoName;
+            numOfBlack = loadSavedGameState.numOfBlack;
+            numOfWhite = loadSavedGameState.numOfWhite;
+            player = loadSavedGameState.player;
+            gameMoves = loadSavedGameState.gameMoves;
+
+            _gameboardGui.UpdateBoardGui(boardData);
+            AddOutline();
+        }
+
         void ForfeitGame()  //Function to be completed
         {
             _gameboardGui.Dispose();
             InitializeComponent();
-        }
-
-        private void PlayerOneName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripLabel1_Click(object sender, EventArgs e)
-        {
-        //    SaveData data = new SaveData(boardData);
-        //    string json = JsonSerializer.Serialize(data);
-        //    File.WriteAllText(path, json);
         }
 
 
@@ -411,7 +414,25 @@ namespace Oneillo_2
 
             Form2 helpForm = new Form2();
             helpForm.Show();
-            
+
+        }
+
+        private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Assume you have a gameState object representing the current state
+            GameState gameState = new GameState(boardData, playerOneName, playerTwoName, numOfBlack, numOfWhite, player, gameMoves);
+            SaveGame(gameState);
+        }
+
+        private GameState LoadGameState()
+        {
+            string filepath = "GameData/Game_Data.JSON";
+
+            string json = File.ReadAllText(filepath);
+
+            GameState loadGameState = JsonConvert.DeserializeObject<GameState>(json);
+
+            return loadGameState;
         }
     }
 }

@@ -33,6 +33,7 @@
             labelOneilloHelp = new Label();
             label1 = new Label();
             richTextBox1 = new RichTextBox();
+            labelCopyRight = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -82,12 +83,24 @@
             richTextBox1.TabIndex = 3;
             richTextBox1.Text = resources.GetString("richTextBox1.Text");
             // 
+            // labelCopyRight
+            // 
+            labelCopyRight.AutoSize = true;
+            labelCopyRight.Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            labelCopyRight.ForeColor = SystemColors.ButtonShadow;
+            labelCopyRight.Location = new Point(619, 698);
+            labelCopyRight.Name = "labelCopyRight";
+            labelCopyRight.Size = new Size(224, 14);
+            labelCopyRight.TabIndex = 4;
+            labelCopyRight.Text = "CopyRight Callum Cunningham ©";
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Beige;
             ClientSize = new Size(855, 721);
+            Controls.Add(labelCopyRight);
             Controls.Add(richTextBox1);
             Controls.Add(label1);
             Controls.Add(labelOneilloHelp);
@@ -110,5 +123,6 @@
         private Label labelOneilloHelp;
         private Label label1;
         private RichTextBox richTextBox1;
+        private Label labelCopyRight;
     }
 }
