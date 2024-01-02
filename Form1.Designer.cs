@@ -41,10 +41,13 @@
             toolStrip1 = new ToolStrip();
             toolStripDropDownButtonGame = new ToolStripDropDownButton();
             newGameToolStripMenuItem = new ToolStripMenuItem();
-            toolStripDropDownButtonHelp = new ToolStripDropDownButton();
-            helpPageToolStripMenuItem = new ToolStripMenuItem();
             saveGameToolStripMenuItem = new ToolStripMenuItem();
             loadGameToolStripMenuItem = new ToolStripMenuItem();
+            toolStripDropDownButtonHelp = new ToolStripDropDownButton();
+            helpPageToolStripMenuItem = new ToolStripMenuItem();
+            toolStripDropDownButton1 = new ToolStripDropDownButton();
+            hideGameInfoToolStripMenuItem = new ToolStripMenuItem();
+            speakToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxBlkToMove).BeginInit();
@@ -144,7 +147,7 @@
             // toolStrip1
             // 
             toolStrip1.BackColor = Color.LightSteelBlue;
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButtonGame, toolStripDropDownButtonHelp });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButtonGame, toolStripDropDownButtonHelp, toolStripDropDownButton1 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(792, 25);
@@ -164,9 +167,23 @@
             // newGameToolStripMenuItem
             // 
             newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
-            newGameToolStripMenuItem.Size = new Size(180, 22);
+            newGameToolStripMenuItem.Size = new Size(134, 22);
             newGameToolStripMenuItem.Text = "New Game";
             newGameToolStripMenuItem.Click += newGameToolStripMenuItem_Click;
+            // 
+            // saveGameToolStripMenuItem
+            // 
+            saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
+            saveGameToolStripMenuItem.Size = new Size(134, 22);
+            saveGameToolStripMenuItem.Text = "Save Game";
+            saveGameToolStripMenuItem.Click += saveGameToolStripMenuItem_Click;
+            // 
+            // loadGameToolStripMenuItem
+            // 
+            loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
+            loadGameToolStripMenuItem.Size = new Size(134, 22);
+            loadGameToolStripMenuItem.Text = "Load Game";
+            loadGameToolStripMenuItem.Click += LoadGameButton_Click;
             // 
             // toolStripDropDownButtonHelp
             // 
@@ -182,23 +199,33 @@
             // helpPageToolStripMenuItem
             // 
             helpPageToolStripMenuItem.Name = "helpPageToolStripMenuItem";
-            helpPageToolStripMenuItem.Size = new Size(180, 22);
+            helpPageToolStripMenuItem.Size = new Size(128, 22);
             helpPageToolStripMenuItem.Text = "Help Page";
             helpPageToolStripMenuItem.Click += helpPageToolStripMenuItem_Click;
             // 
-            // saveGameToolStripMenuItem
+            // toolStripDropDownButton1
             // 
-            saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
-            saveGameToolStripMenuItem.Size = new Size(180, 22);
-            saveGameToolStripMenuItem.Text = "Save Game";
-            saveGameToolStripMenuItem.Click += saveGameToolStripMenuItem_Click;
+            toolStripDropDownButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButton1.DropDownItems.AddRange(new ToolStripItem[] { hideGameInfoToolStripMenuItem, speakToolStripMenuItem });
+            toolStripDropDownButton1.Image = (Image)resources.GetObject("toolStripDropDownButton1.Image");
+            toolStripDropDownButton1.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            toolStripDropDownButton1.Size = new Size(62, 22);
+            toolStripDropDownButton1.Text = "Settings";
             // 
-            // loadGameToolStripMenuItem
+            // hideGameInfoToolStripMenuItem
             // 
-            loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
-            loadGameToolStripMenuItem.Size = new Size(180, 22);
-            loadGameToolStripMenuItem.Text = "Load Game";
-            loadGameToolStripMenuItem.Click += LoadGameButton_Click;
+            hideGameInfoToolStripMenuItem.Name = "hideGameInfoToolStripMenuItem";
+            hideGameInfoToolStripMenuItem.Size = new Size(180, 22);
+            hideGameInfoToolStripMenuItem.Text = "Hide Game Info";
+            hideGameInfoToolStripMenuItem.Click += hideGameInfoToolStripMenuItem_Click;
+            // 
+            // speakToolStripMenuItem
+            // 
+            speakToolStripMenuItem.Name = "speakToolStripMenuItem";
+            speakToolStripMenuItem.Size = new Size(180, 22);
+            speakToolStripMenuItem.Text = "Speak";
+            speakToolStripMenuItem.Click += speakToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -252,5 +279,8 @@
         private ToolStripMenuItem helpPageToolStripMenuItem;
         private ToolStripMenuItem saveGameToolStripMenuItem;
         private ToolStripMenuItem loadGameToolStripMenuItem;
+        private ToolStripDropDownButton toolStripDropDownButton1;
+        private ToolStripMenuItem hideGameInfoToolStripMenuItem;
+        private ToolStripMenuItem speakToolStripMenuItem;
     }
 }

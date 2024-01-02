@@ -1,6 +1,7 @@
 using GameboardGUI;
 using Newtonsoft.Json;
-using System.Runtime.CompilerServices;
+using System.Speech.Synthesis;
+
 
 namespace Oneillo_2
 {
@@ -8,16 +9,25 @@ namespace Oneillo_2
     {
         GameboardImageArray _gameboardGui;
 
-        const int rows = 8, columns = 8;
-        int[,] boardData;
-        int gameMoves = 0; // implement this in the GUI
-        int numOfBlack, numOfWhite;
-        int player = 1;
+        private const int rows = 8, columns = 8;
+        private int[,] boardData;
+        private int gameMoves = 0; // implement this in the GUI
+        private int numOfBlack, numOfWhite;
+        private int player = 1;
+        int onOff = 0;
+        int speakOnOff = 0;
 
-        string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
-        string winner;  // implement this in the GUI
-        string playerOneName;
-        string playerTwoName;
+        private string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
+        private string winner;  // implement this in the GUI
+        private string playerOneName;
+        private string playerTwoName;
+
+        private bool speak;
+        private bool showInfoPanel;
+
+        SpeechSynthesizer synthesizer = new SpeechSynthesizer();
+
+        private List<GameState> savedGames = new List<GameState>();
 
         private int[,] MakeBoardArray()
         {
@@ -37,6 +47,7 @@ namespace Oneillo_2
             Point top = new Point(10, 30); // setting up the form size
             Point bottom = new Point(10, 170);
             InitializeComponent();
+
             boardData = this.MakeBoardArray();  // gets the values of board size
 
             try
@@ -170,6 +181,10 @@ namespace Oneillo_2
                 {
                     winner = "Black";
                     MessageBox.Show("Black Wins! with " + numOfBlack + " counters!");
+                    if (speak)
+                    {
+                        synthesizer.Speak("Black Wins! with " + numOfBlack + " counters!");
+                    }
                 }
                 else if (numOfBlack < numOfWhite)
                 {
@@ -283,6 +298,11 @@ namespace Oneillo_2
         {
             int RowClicked = _gameboardGui.GetCurrentRowIndex(sender);
             int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
+            
+            if (speak)
+            {
+                SpeakPlayer();
+            }
 
             gameMoves += 1;
 
@@ -318,15 +338,18 @@ namespace Oneillo_2
                 player = 3 - player; // 2 for black, 1 for white
             }
 
-            if (player == 1)
+            if (onOff % 2 == 0)      // only can be displayed when game info panel has not beem hidden 
             {
-                pictureBoxBlkToMove.Visible = true;
-                pictureBoxWhtToMove.Visible = false;
-            }
-            if (player == 2)
-            {
-                pictureBoxWhtToMove.Visible = true;
-                pictureBoxBlkToMove.Visible = false;
+                if (player == 1)
+                {
+                    pictureBoxBlkToMove.Visible = true;
+                    pictureBoxWhtToMove.Visible = false;
+                }
+                if (player == 2)
+                {
+                    pictureBoxWhtToMove.Visible = true;
+                    pictureBoxBlkToMove.Visible = false;
+                }
             }
 
             // Add outlines for valid moves for the next player
@@ -344,11 +367,16 @@ namespace Oneillo_2
 
         public void SaveGame(GameState gameState)
         {
+            savedGames.Add(gameState);
+
             string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
 
             string filePath = "GameData/Game_Data.JSON";
 
+            // Make sure you have read all data that already exists and add it into the string
+            // Make sure that you specify different names for different games
             File.WriteAllText(filePath, json);
+
         }
 
         // Method triggered when the user clicks a "Load Game" button
@@ -367,13 +395,6 @@ namespace Oneillo_2
             AddOutline();
         }
 
-        void ForfeitGame()  //Function to be completed
-        {
-            _gameboardGui.Dispose();
-            InitializeComponent();
-        }
-
-
         private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             boardData = new int[rows, columns];
@@ -388,7 +409,7 @@ namespace Oneillo_2
             numOfWhite = 2;
             player = 1;
 
-            winner = string.Empty;  // implement this in the GUI
+            winner = string.Empty; 
 
             _gameboardGui.UpdateBoardGui(boardData);
 
@@ -426,6 +447,9 @@ namespace Oneillo_2
 
         private GameState LoadGameState()
         {
+            // Load all games into a list, allow the user to select the game from the list, use indexes and not name checking like other people (harrison and uzair)
+
+
             string filepath = "GameData/Game_Data.JSON";
 
             string json = File.ReadAllText(filepath);
@@ -433,6 +457,66 @@ namespace Oneillo_2
             GameState loadGameState = JsonConvert.DeserializeObject<GameState>(json);
 
             return loadGameState;
+        }
+        private void HideGameInfoPanelProperties()
+        {
+            pictureBoxBlkToMove.Visible = false;
+            pictureBoxWhtToMove.Visible = false;
+            pictureBox1.Visible = false;
+            pictureBox2.Visible = false;            // disables visibility of each icon
+            lblGameMoves.Visible = false;
+            lblBlack.Visible = false;               // need to do this because of the way the form is divided to stop the squares taking up the whole screen
+            lblWhite.Visible = false;
+            richTextBoxPlayerOne.Visible = false;
+            richTextBoxPlayerTwo.Visible = false;
+
+        }
+        private void ShowGameInfoPanelProperties()
+        {
+            pictureBoxBlkToMove.Visible = true;
+            pictureBoxWhtToMove.Visible = true;
+            pictureBox1.Visible = true;             // enables visibility when 'show' clicked again
+            pictureBox2.Visible = true;
+            lblGameMoves.Visible = true;
+            lblBlack.Visible = true;
+            lblWhite.Visible = true;
+            richTextBoxPlayerOne.Visible = true;
+            richTextBoxPlayerTwo.Visible = true;
+
+        }
+
+        private void hideGameInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            onOff += 1;
+            if (onOff % 2 != 0)             // when clicked / unclicked it enables / disables the game information panel function 
+            {
+                hideGameInfoToolStripMenuItem.Text = "Hide Game Info";
+                HideGameInfoPanelProperties();
+            }
+            else
+            {
+                hideGameInfoToolStripMenuItem.Text = "Show Game Info";   // changes the button text to fit the action
+                ShowGameInfoPanelProperties();
+            }
+        }
+
+        private void SpeakPlayer()
+        {
+            string speakPlayerTurn = $"{player} to move";
+            synthesizer.Speak(speakPlayerTurn);
+        }
+
+        private void speakToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            speakOnOff++;
+            if (speakOnOff % 2 != 0)   // when clicked / unclicked it enables / disables the speak function
+            {
+                speak = true;
+            }
+            else
+            {
+                speak = false;
+            }
         }
     }
 }
