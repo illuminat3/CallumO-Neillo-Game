@@ -16,8 +16,9 @@ namespace Oneillo_2
         public int numOfWhite { get; set; }
         public int player { get; set; }
         public int gameMoves { get; set; }
+        public string gameName { get; set; }
 
-        public GameState(int[,] currentBoardData, string CurrentPlayerOneName,string CurrentPlayerTwoName, int CurrentNumOfBlack, int CurrentNumOfWhite, int CurrentPlayer, int CurrentGameMoves)
+        public GameState(int[,] currentBoardData, string CurrentPlayerOneName,string CurrentPlayerTwoName, int CurrentNumOfBlack, int CurrentNumOfWhite, int CurrentPlayer, int CurrentGameMoves, string CurrentGameName)
         {
             boardData = currentBoardData;
 
@@ -32,6 +33,8 @@ namespace Oneillo_2
             player = CurrentPlayer;
 
             gameMoves = CurrentGameMoves;
+
+            gameName = CurrentGameName;
         }
 
     }

@@ -21,6 +21,7 @@ namespace Oneillo_2
         private string winner;  // implement this in the GUI
         private string playerOneName;
         private string playerTwoName;
+        private string gameName = DateTime.Now.ToString();
 
         private bool speak;
         private bool showInfoPanel;
@@ -59,9 +60,9 @@ namespace Oneillo_2
                 pictureBoxBlkToMove.Visible = true;
                 pictureBoxWhtToMove.Visible = false;
 
-                CheckNumPieces();
+                CheckNumPieces();                                     // sets the GUI by checking the pieces held by each player
                 lblBlack.Text = $"Counters: {numOfBlack}";
-                lblWhite.Text = $"Counters: {numOfWhite}";
+                lblWhite.Text = $"Counters: {numOfWhite}";            // displays number of pieces held by each player
 
                 lblGameMoves.Text = $"Game Moves: {gameMoves}";
 
@@ -88,14 +89,14 @@ namespace Oneillo_2
             (int x, int y)[] OFFSETS =
             {
                 (1, 0), (1, 1),
-                (0, 1), (-1, 0),
+                (0, 1), (-1, 0),               // offsets for the algorithm to check if a valid move is there
                 (0, -1), (1, -1),
-                (-1, 1), (-1, -1)
+                (-1, 1), (-1, -1)              // N, S, E W, NE, SE, NW, SW
             };
 
             bool isAnyMovePossible = false;
 
-            foreach (var offset in OFFSETS)
+            foreach (var offset in OFFSETS)   // loopo through offset values and check
             {
                 int changeInRow = offset.x;
                 int changeInCol = offset.y;
@@ -103,11 +104,11 @@ namespace Oneillo_2
                 int row = rowClicked + changeInRow;
                 int col = columnClicked + changeInCol;
 
-                bool validDirection = false;
+                bool validDirection = false;   // initial bool is false, must be proven to be true, not other way around
 
                 while (row >= 0 && row < rows && col >= 0 && col < columns)
                 {
-                    if (boardData[row, col] == player)
+                    if (boardData[row, col] == player)   
                     {
                         validDirection = true;
                         break;
@@ -159,9 +160,9 @@ namespace Oneillo_2
             {
                 for (int col = 0; col < 8; col++)
                 {
-                    if (_gameboardGui.GetTile(row, col).ImageLocation.EndsWith("3.PNG"))
+                    if (_gameboardGui.GetTile(row, col).ImageLocation.EndsWith("3.PNG"))    // set counter as a valid move
                     {
-                        hasLegalMoves = true;
+                        hasLegalMoves = true;    // game not to be ended
                         break;
                     }
                 }
@@ -183,7 +184,7 @@ namespace Oneillo_2
                     MessageBox.Show("Black Wins! with " + numOfBlack + " counters!");
                     if (speak)
                     {
-                        synthesizer.Speak("Black Wins! with " + numOfBlack + " counters!");
+                        synthesizer.Speak("Black Wins! with " + numOfBlack + " counters!");   // win dialogue / message to be displayed
                     }
                 }
                 else if (numOfBlack < numOfWhite)
@@ -208,7 +209,7 @@ namespace Oneillo_2
                 {
                     if (IsAnyMoveValid(row, col, player))
                     {
-                        _gameboardGui.SetTile(row, col, 3.ToString());
+                        _gameboardGui.SetTile(row, col, 3.ToString());   // loiops through board, when a move is 'valid' it sets it as the appropriate image
                     }
                 }
             }
@@ -218,7 +219,7 @@ namespace Oneillo_2
         {
             (int x, int y)[] OFFSETS =
             {
-                (1, 0), (1, 1),
+                (1, 0), (1, 1),            // offsets same as IsAnyMoveValid
                 (0, 1), (-1, 0),
                 (0, -1), (1, -1),
                 (-1, 1), (-1, -1)
@@ -243,7 +244,7 @@ namespace Oneillo_2
                     flipped = true;
                 }
 
-                if (flipped && r >= 0 && r < rows && c >= 0 && c < columns && boardData[r, c] == player)
+                if (flipped && r >= 0 && r < rows && c >= 0 && c < columns && boardData[r, c] == player)  // conditional for flip
                 {
                     // Flip the opponent's tiles
                     int flipR = row + changeInRow;
@@ -261,22 +262,22 @@ namespace Oneillo_2
 
         public void ClearPreviousLegalMoves()
         {
-            for (int row = 0; row < 8; row++)
+            for (int row = 0; row < 8; row++)  // loops through the board
             {
                 for (int col = 0; col < 8; col++)
                 {
                     if (boardData[row, col] == 3)
                     {
-                        _gameboardGui.SetTile(row, col, 0.ToString());
+                        _gameboardGui.SetTile(row, col, 0.ToString());  // removes all legal moves from the board once a move has been made
                     }
-                }
+                }                                                       // so opponants legal moves are not still shown as legal moves
             }
         }
 
-        public void CheckNumPieces()
+        public void CheckNumPieces()   // loops through the board and checks the pieces that are black (1.png) and whiye (2.png)
         {
             numOfBlack = 0;
-            numOfWhite = 0;
+            numOfWhite = 0;                    // sets to 0 so it does not keep adding on each click
             for (int row = 0; row < 8; row++)
             {
                 for (int col = 0; col < 8; col++)
@@ -295,13 +296,17 @@ namespace Oneillo_2
 
         public void GameTileClicked(object sender, EventArgs e)
         {
+            if (speak)
+            {
+               // TODO stop it
+            }
             int RowClicked = _gameboardGui.GetCurrentRowIndex(sender);
-            int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);
+            int ColumnClicked = _gameboardGui.GetCurrentColumnIndex(sender);    //gets the tile clicked
 
             if (richTextBoxPlayerTwo.Text == "")
             {
                 richTextBoxPlayerTwo.Text = "Player #2";
-                playerOneName = richTextBoxPlayerTwo.Text;
+                playerOneName = richTextBoxPlayerTwo.Text;   // if no name is selected it defualts to 'Player #1' or 'Player #2'
             }
             if (richTextBoxPlayerOne.Text == "")
             {
@@ -360,20 +365,6 @@ namespace Oneillo_2
             GameEnded();
         }
 
-        public void SaveGame(GameState gameState)
-        {
-            savedGames.Add(gameState);
-
-            string json = JsonConvert.SerializeObject(gameState, Formatting.Indented);
-
-            string filePath = "GameData/Game_Data.JSON";
-
-            // Make sure you have read all data that already exists and add it into the string
-            // Make sure that you specify different names for different games
-            File.WriteAllText(filePath, json);
-
-        }
-
         // Method triggered when the user clicks a "Load Game" button
         private void LoadGameButton_Click(object sender, EventArgs e)
         {
@@ -381,7 +372,7 @@ namespace Oneillo_2
             boardData = loadSavedGameState.boardData;
             playerOneName = loadSavedGameState.playerOneName;
             playerTwoName = loadSavedGameState.playerTwoName;
-            numOfBlack = loadSavedGameState.numOfBlack;
+            numOfBlack = loadSavedGameState.numOfBlack;  
             numOfWhite = loadSavedGameState.numOfWhite;
             player = loadSavedGameState.player;
             gameMoves = loadSavedGameState.gameMoves;
@@ -395,7 +386,7 @@ namespace Oneillo_2
             boardData = new int[rows, columns];
 
             boardData[3, 3] = 2;
-            boardData[4, 4] = 2;
+            boardData[4, 4] = 2;         // initialise new game board with needed variables
             boardData[3, 4] = 1;
             boardData[4, 3] = 1;
 
@@ -404,9 +395,9 @@ namespace Oneillo_2
             numOfWhite = 2;
             player = 1;
 
-            winner = string.Empty; 
+            winner = string.Empty; // resets winner string
 
-            _gameboardGui.UpdateBoardGui(boardData);
+            _gameboardGui.UpdateBoardGui(boardData);   // sync board and array
 
             lblGameMoves.Text = $"Game Moves: {gameMoves}";
 
@@ -414,7 +405,7 @@ namespace Oneillo_2
 
             lblBlack.Text = $"Counters: {numOfBlack}";
             lblWhite.Text = $"Counters: {numOfWhite}";
-            lblGameMoves.Text = $"Game Moves: {gameMoves}";
+            lblGameMoves.Text = $"Game Moves: {gameMoves}";       // all data here is reset to origional values to keep info accurate
 
             richTextBoxPlayerTwo.Text = string.Empty;
             richTextBoxPlayerOne.Text = string.Empty;
@@ -422,7 +413,7 @@ namespace Oneillo_2
             richTextBoxPlayerTwo.Enabled = true;
             richTextBoxPlayerOne.Enabled = true;
 
-            AddOutline();
+            AddOutline();  //need to be added again when new game initialises
         }
 
         private void helpPageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -436,21 +427,29 @@ namespace Oneillo_2
         private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Assume you have a gameState object representing the current state
-            GameState gameState = new GameState(boardData, playerOneName, playerTwoName, numOfBlack, numOfWhite, player, gameMoves);
-            SaveGame(gameState);
+            GameState gameState = new GameState(boardData, playerOneName, playerTwoName, numOfBlack, numOfWhite, player, gameMoves, gameName);
+            SaveGameForm save = new SaveGameForm(gameState);
+            save.Show();
         }
 
         private GameState LoadGameState()
         {
-            // Load all games into a list, allow the user to select the game from the list, use indexes and not name checking like other people (harrison and uzair)
 
-            string filepath = "GameData/Game_Data.JSON";
+            string filePath = "GameData/Game_Data.JSON";
 
-            string json = File.ReadAllText(filepath);
+            dynamic data = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
 
-            GameState loadGameState = JsonConvert.DeserializeObject<GameState>(json);
+            foreach (GameState gameState in data.Games)
+            {
+                //Add to list box
+            }
+            return data.Games[0];
 
-            return loadGameState;
+
+    //        return data.Games[] //use the index from the listbox 
+
+            
+        
         }
         private void HideGameInfoPanelProperties()
         {
@@ -500,14 +499,14 @@ namespace Oneillo_2
 
             if (player == 1)
             {
-                speakPlayerTurn = $"{richTextBoxPlayerOne.Text} to move";
-            }
+                speakPlayerTurn = $"{richTextBoxPlayerOne.Text} to move";  // speak dialogue set
+            }  
             else
             {
                 speakPlayerTurn = $"{richTextBoxPlayerTwo.Text} to move";
             }
 
-            synthesizer.SpeakAsync(speakPlayerTurn);
+            synthesizer.SpeakAsync(speakPlayerTurn);  // speak triggered
         }
 
         private void speakToolStripMenuItem_Click(object sender, EventArgs e)
