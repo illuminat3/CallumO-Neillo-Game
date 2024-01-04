@@ -1,6 +1,7 @@
 using GameboardGUI;
 using Newtonsoft.Json;
 using System.Speech.Synthesis;
+using System.Windows.Forms;
 
 
 namespace Oneillo_2
@@ -387,7 +388,7 @@ namespace Oneillo_2
 
         public void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveGamePromptForm newForm = new SaveGamePromptForm(this);
+            SaveGamePromptForm newForm = new SaveGamePromptForm(this, boardData, playerOneName, playerTwoName, numOfBlack, numOfWhite, player, gameMoves, gameName);
             newForm.Show();
         }
 
