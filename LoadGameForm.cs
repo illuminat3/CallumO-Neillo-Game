@@ -14,7 +14,7 @@ namespace Oneillo_2
 {
     public partial class LoadGameForm : Form
     {
-        private Form1 form;
+        private GameboardForm form;
         private GameData data;
         private const string filePath = "GameData/Game_Data.JSON";
 
@@ -24,7 +24,7 @@ namespace Oneillo_2
             LoadGameData();
         }
 
-        public LoadGameForm(Form1 form)
+        public LoadGameForm(GameboardForm form)
         {
             InitializeComponent();
             LoadGameData();

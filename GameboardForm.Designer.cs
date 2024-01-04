@@ -1,6 +1,6 @@
 ﻿namespace Oneillo_2
 {
-    partial class Form1
+    partial class GameboardForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameboardForm));
             pictureBox1 = new PictureBox();
             pictureBox2 = new PictureBox();
             lblBlack = new Label();
