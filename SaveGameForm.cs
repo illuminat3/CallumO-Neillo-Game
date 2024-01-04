@@ -11,7 +11,7 @@ namespace Oneillo_2
         private GameState gameState;
         private GameData data;
         private const int maxGames = 5;
-        private string filePath = "GameData/Game_Data.JSON";
+        private const string filePath = "GameData/Game_Data.JSON";
 
 
         public SaveGameForm(GameState currentGameState)
@@ -31,16 +31,18 @@ namespace Oneillo_2
                 string jsonData = File.ReadAllText(filePath);
                 data = JsonConvert.DeserializeObject<GameData>(jsonData);
             }
-            else
-            {
-                data = new GameData(new List<GameState>());
-            }
 
             comboBox1.Items.Clear();
             foreach (var game in data.games)
             {
                 comboBox1.Items.Add(game.gameName);
             }
+
+            if (data.games.Count < maxGames)
+            {
+                comboBox1.Items.Add("");
+            }
+            comboBox1.SelectedIndex = 0;
         }
 
 
