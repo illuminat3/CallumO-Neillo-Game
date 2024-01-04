@@ -12,10 +12,13 @@ namespace Oneillo_2
 {
     public partial class SaveGamePromptForm : Form
     {
-        public SaveGamePromptForm()
+        private GameboardForm form;
+        public SaveGamePromptForm(GameboardForm form)
         {
             InitializeComponent();
+            this.form = form;
         }
+
 
         public void buttonYesSavePropt_Click(object sender, EventArgs e)
         {
@@ -29,7 +32,8 @@ namespace Oneillo_2
 
         private void buttonNoSavePrompt_Click(object sender, EventArgs e)
         {
-            // 
+            form.NewGame();
+            this.Close();
         }
     }
 }

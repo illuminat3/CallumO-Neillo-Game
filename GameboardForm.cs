@@ -387,9 +387,12 @@ namespace Oneillo_2
 
         public void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveGamePromptForm newForm = new SaveGamePromptForm();
+            SaveGamePromptForm newForm = new SaveGamePromptForm(this);
             newForm.Show();
+        }
 
+        public void NewGame()
+        {
             boardData = new int[rows, columns];
 
             boardData[3, 3] = 2;
@@ -422,7 +425,6 @@ namespace Oneillo_2
 
             AddOutline();  //need to be added again when new game initialises
         }
-
         private void helpPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
 

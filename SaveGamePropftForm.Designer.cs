@@ -66,6 +66,7 @@
             buttonNoSavePrompt.TabIndex = 2;
             buttonNoSavePrompt.Text = "No";
             buttonNoSavePrompt.UseVisualStyleBackColor = false;
+            buttonNoSavePrompt.Click += buttonNoSavePrompt_Click;
             // 
             // buttonCancelSavePrompt
             // 
