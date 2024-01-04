@@ -87,8 +87,6 @@
 
         #endregion
 
-        private string filePath;
-        private dynamic data;
 
         private ComboBox comboBox1;
         private Label labelSavedGames;

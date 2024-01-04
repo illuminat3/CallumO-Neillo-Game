@@ -1,6 +1,7 @@
 ﻿{
-  "Games": [],
+  "Games": [
+  ],
   "Settings": {
-    "SpeakEnabled" :  true
+    "SpeakEnabled": true
   }
 }

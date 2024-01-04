@@ -1,61 +1,69 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Oneillo_2
 {
     public partial class SaveGameForm : Form
     {
         private GameState gameState;
+        private GameData data;
+        private const int maxGames = 5;
+        private string filePath = "GameData/Game_Data.JSON";
+
+
         public SaveGameForm(GameState currentGameState)
         {
-
-            gameState = currentGameState;
-
             InitializeComponent();
 
-            filePath = "GameData/Game_Data.JSON";
-
-            data = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
-
-            if (data.Games == null)
-            {
-                // No games exist, create a list to avoid errors
-                data.Games = new List<GameState>();
-            }
-            else
-            {
-                // Games exist, add them to the combobox
-                for (int i = 0; i < data.Games.Count; i++)
-                {
-                    comboBox1.Items[i] = data.Games[i].gameName;
-                }
-            }
-
+            gameState = currentGameState;
+            LoadGameData();
             textBoxGameName.Text = gameState.gameName;
         }
 
-        public void SaveGame()
+
+        private void LoadGameData()
         {
-            int gameCounter = data.Games.Count;
-
-
-            //Checks whether to override a gamestate or to add the gamestate
-            if (comboBox1.SelectedIndex == gameCounter)
+            if (File.Exists(filePath))
             {
-                data.Games.Add(gameState);
+                string jsonData = File.ReadAllText(filePath);
+                data = JsonConvert.DeserializeObject<GameData>(jsonData);
             }
             else
             {
-                data.Games.Add(JsonConvert.SerializeObject(gameState));  // need json convert
+                data = new GameData(new List<GameState>());
+            }
+
+            comboBox1.Items.Clear();
+            foreach (var game in data.games)
+            {
+                comboBox1.Items.Add(game.gameName);
+            }
+
+            if (data.games.Count < maxGames)
+            {
+                comboBox1.Items.Add(""); 
+            }
+            comboBox1.SelectedIndex = 0;
+        }
+
+
+        private void SaveGame()
+        {
+            int selectedIndex = comboBox1.SelectedIndex;
+
+            if (selectedIndex >= 0 && selectedIndex < data.games.Count)
+            {
+
+                data.games[selectedIndex] = gameState;
+            }
+            else if (data.games.Count < maxGames)
+            {
+                // If the selected index is out of range (implying a new game),
+                // and the total number of games is less than MaxGames, add the new game
+                data.games.Add(gameState);
             }
 
             File.WriteAllText(filePath, JsonConvert.SerializeObject(data));
