@@ -408,17 +408,8 @@ namespace Oneillo_2
         // Method triggered when the user clicks a "Load Game" button
         private void LoadGameButton_Click(object sender, EventArgs e)
         {
-            GameState loadSavedGameState = LoadGameState();
-            boardData = loadSavedGameState.boardData;
-            playerOneName = loadSavedGameState.playerOneName;
-            playerTwoName = loadSavedGameState.playerTwoName;
-            numOfBlack = loadSavedGameState.numOfBlack;  
-            numOfWhite = loadSavedGameState.numOfWhite;
-            player = loadSavedGameState.player;
-            gameMoves = loadSavedGameState.gameMoves;
-
-            _gameboardGui.UpdateBoardGui(boardData);
-            AddOutline();
+            LoadGameForm loadGameForm = new LoadGameForm();
+            loadGameForm.Show();
         }
 
         public void newGameToolStripMenuItem_Click(object sender, EventArgs e)
