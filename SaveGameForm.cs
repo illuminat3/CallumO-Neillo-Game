@@ -54,6 +54,13 @@ namespace Oneillo_2
         {
             int selectedIndex = comboBox1.SelectedIndex;
 
+            if (textBoxGameName.Text != null || textBoxGameName.Text != "")
+            {
+                gameState.gameName = textBoxGameName.Text;
+            }
+
+
+
             if (selectedIndex >= 0 && selectedIndex < data.games.Count)
             {
 
