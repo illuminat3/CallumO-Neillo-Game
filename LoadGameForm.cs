@@ -44,7 +44,7 @@ namespace Oneillo_2
             int selectedIndex = comboBox1.SelectedIndex;
             GameState loadGameState = data.games[selectedIndex];
 
-            Form1 form1 = new Form1(loadGameState);
+            GameboardForm form1 = new GameboardForm(loadGameState);
         }
     }
 }

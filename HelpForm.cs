@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Oneillo_2
 {
-    public partial class Form2 : Form
+    public partial class HelpForm : Form
     {
-        public Form2()
+        public HelpForm()
         {
             InitializeComponent();
         }

@@ -5,7 +5,7 @@ using System.Speech.Synthesis;
 
 namespace Oneillo_2
 {
-    public partial class Form1 : Form
+    public partial class GameboardForm : Form
     {
         GameboardImageArray _gameboardGui;
 
@@ -42,7 +42,7 @@ namespace Oneillo_2
         }
         // On start setup board data.
 
-        public Form1()
+        public GameboardForm()
         {
 
             Point top = new Point(10, 30); // setting up the form size
@@ -76,7 +76,7 @@ namespace Oneillo_2
         }
         // CLick Listener 
 
-        public Form1(GameState gameState)
+        public GameboardForm(GameState gameState)
         {
 
             Point top = new Point(10, 30); // setting up the form size
@@ -453,7 +453,7 @@ namespace Oneillo_2
         private void helpPageToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            Form2 helpForm = new Form2();
+            HelpForm helpForm = new HelpForm();
             helpForm.Show();
 
         }
