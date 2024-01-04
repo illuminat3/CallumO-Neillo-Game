@@ -22,7 +22,7 @@ namespace Oneillo_2
         private string playerTwoName;
         string gameName = DateTime.Now.ToString();
 
-        private bool speak;
+        private bool speakEnabled;
         private bool showInfoPanel;
 
         SpeechSynthesizer synthesizer = new SpeechSynthesizer();
@@ -180,7 +180,7 @@ namespace Oneillo_2
                 {
                     winner = "Black";
                     MessageBox.Show("Black Wins! with " + numOfBlack + " counters!");
-                    if (speak)
+                    if (speakEnabled)
                     {
                         synthesizer.Speak("Black Wins! with " + numOfBlack + " counters!");   // win dialogue / message to be displayed
                     }
@@ -294,7 +294,7 @@ namespace Oneillo_2
 
         public void GameTileClicked(object sender, EventArgs e)
         {
-            if (speak)
+            if (speakEnabled)
             {
                // TODO stop it
             }
@@ -354,7 +354,7 @@ namespace Oneillo_2
 
                 lblGameMoves.Text = $"Game Moves: {gameMoves}";
 
-                if (speak)
+                if (speakEnabled)
                 {
                     SpeakPlayer();
                 }
@@ -517,7 +517,7 @@ namespace Oneillo_2
 
         private void speakToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            speak = !speak;
+            speakEnabled = !speakEnabled;
         }
     }
 }
