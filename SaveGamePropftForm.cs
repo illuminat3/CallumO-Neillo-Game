@@ -19,12 +19,17 @@ namespace Oneillo_2
 
         public void buttonYesSavePropt_Click(object sender, EventArgs e)
         {
-        //    SaveGame();
+            //    SaveGame();
         }
 
         private void buttonCancelSavePrompt_Click(object sender, EventArgs e)
         {
-       //     SaveGamePromptForm
+            this.Close();
+        }
+
+        private void buttonNoSavePrompt_Click(object sender, EventArgs e)
+        {
+            // 
         }
     }
 }
