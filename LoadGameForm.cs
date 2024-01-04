@@ -14,6 +14,7 @@ namespace Oneillo_2
 {
     public partial class LoadGameForm : Form
     {
+        private Form1 form;
         private GameData data;
         private const string filePath = "GameData/Game_Data.JSON";
 
@@ -21,6 +22,13 @@ namespace Oneillo_2
         {
             InitializeComponent();
             LoadGameData();
+        }
+
+        public LoadGameForm(Form1 form)
+        {
+            InitializeComponent();
+            LoadGameData();
+            this.form = form;
         }
 
         private void LoadGameData()
@@ -44,7 +52,8 @@ namespace Oneillo_2
             int selectedIndex = comboBox1.SelectedIndex;
             GameState loadGameState = data.games[selectedIndex];
 
-            Form1 form1 = new Form1(loadGameState);
+            form.LoadGame(loadGameState);
+            Close();
         }
     }
 }
