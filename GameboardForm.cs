@@ -14,8 +14,7 @@ namespace Oneillo_2
         private int gameMoves = 0; // implement this in the GUI
         private int numOfBlack, numOfWhite;
         private int player = 1;
-        int onOff = 0;
-        int speakOnOff = 0;
+        
 
         private string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
         private string winner;  // implement this in the GUI
@@ -23,7 +22,7 @@ namespace Oneillo_2
         private string playerTwoName;
         string gameName = DateTime.Now.ToString();
 
-        private bool speak;
+        private bool speakEnabled;
         private bool showInfoPanel;
 
         SpeechSynthesizer synthesizer = new SpeechSynthesizer();
@@ -75,47 +74,6 @@ namespace Oneillo_2
             AddOutline();
         }
         // CLick Listener 
-
-        public GameboardForm(GameState gameState)
-        {
-
-            Point top = new Point(10, 30); // setting up the form size
-            Point bottom = new Point(10, 170);
-            InitializeComponent();
-            
-            boardData = gameState.boardData;
-            gameName = gameState.gameName;
-            gameMoves = gameState.gameMoves;
-            player = gameState.player;
-            playerOneName = gameState.playerOneName;
-            playerTwoName = gameState.playerTwoName;
-            numOfBlack = gameState.numOfBlack;
-            numOfWhite = gameState.numOfWhite;
-
-            try
-            {
-                _gameboardGui = new GameboardImageArray(this, boardData, top, bottom, 3, imagepaths); // sets up the board on top of the form
-                _gameboardGui.TileClicked += new GameboardImageArray.TileClickedEventDelegate(GameTileClicked);
-                _gameboardGui.UpdateBoardGui(boardData);
-
-                pictureBoxBlkToMove.Visible = true;
-                pictureBoxWhtToMove.Visible = false;
-
-                CheckNumPieces();                                     // sets the GUI by checking the pieces held by each player
-                lblBlack.Text = $"Counters: {numOfBlack}";
-                lblWhite.Text = $"Counters: {numOfWhite}";            // displays number of pieces held by each player
-
-                lblGameMoves.Text = $"Game Moves: {gameMoves}";
-
-            }
-            catch (Exception ex)
-            {
-                DialogResult result = MessageBox.Show("Board Size Too Small! ");  // checks for excpetion
-                this.Close();
-            }
-            AddOutline();
-
-        }
 
         private bool IsAnyMoveValid(int rowClicked, int columnClicked, int player)
         {
@@ -222,7 +180,7 @@ namespace Oneillo_2
                 {
                     winner = "Black";
                     MessageBox.Show("Black Wins! with " + numOfBlack + " counters!");
-                    if (speak)
+                    if (speakEnabled)
                     {
                         synthesizer.Speak("Black Wins! with " + numOfBlack + " counters!");   // win dialogue / message to be displayed
                     }
@@ -336,7 +294,7 @@ namespace Oneillo_2
 
         public void GameTileClicked(object sender, EventArgs e)
         {
-            if (speak)
+            if (speakEnabled)
             {
                // TODO stop it
             }
@@ -376,7 +334,7 @@ namespace Oneillo_2
                 // Switch players
                 player = 3 - player; // 2 for black, 1 for white
 
-                if (onOff % 2 == 0)      // only can be displayed when game info panel has not beem hidden 
+                if (showInfoPanel)      // only can be displayed when game info panel has not beem hidden 
                 {
                     if (player == 1)
                     {
@@ -396,7 +354,7 @@ namespace Oneillo_2
 
                 lblGameMoves.Text = $"Game Moves: {gameMoves}";
 
-                if (speak)
+                if (speakEnabled)
                 {
                     SpeakPlayer();
                 }
@@ -408,8 +366,23 @@ namespace Oneillo_2
         // Method triggered when the user clicks a "Load Game" button
         private void LoadGameButton_Click(object sender, EventArgs e)
         {
-            LoadGameForm loadGameForm = new LoadGameForm();
+            LoadGameForm loadGameForm = new LoadGameForm(this);
             loadGameForm.Show();
+            
+        }
+
+        public void LoadGame(GameState loadSavedGameState)
+        {
+            boardData = loadSavedGameState.boardData;
+            playerOneName = loadSavedGameState.playerOneName;
+            playerTwoName = loadSavedGameState.playerTwoName;
+            numOfBlack = loadSavedGameState.numOfBlack;
+            numOfWhite = loadSavedGameState.numOfWhite;
+            player = loadSavedGameState.player;
+            gameMoves = loadSavedGameState.gameMoves;
+
+            _gameboardGui.UpdateBoardGui(boardData);
+            AddOutline();
         }
 
         public void newGameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -511,16 +484,18 @@ namespace Oneillo_2
 
         private void hideGameInfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            onOff += 1;
-            if (onOff % 2 != 0)             // when clicked / unclicked it enables / disables the game information panel function 
+            showInfoPanel = !showInfoPanel;
+            switch (showInfoPanel)             // when clicked / unclicked it enables / disables the game information panel function 
             {
+                case true:
+                    hideGameInfoToolStripMenuItem.Text = "Show Game Info";   // changes the button text to fit the action
+                    HideGameInfoPanelProperties();
+                    break;
+
+                case false:
                 hideGameInfoToolStripMenuItem.Text = "Hide Game Info";
-                HideGameInfoPanelProperties();
-            }
-            else
-            {
-                hideGameInfoToolStripMenuItem.Text = "Show Game Info";   // changes the button text to fit the action
                 ShowGameInfoPanelProperties();
+                break;
             }
         }
 
@@ -542,15 +517,7 @@ namespace Oneillo_2
 
         private void speakToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            speakOnOff++;
-            if (speakOnOff % 2 != 0)   // when clicked / unclicked it enables / disables the speak function
-            {
-                speak = true;
-            }
-            else
-            {
-                speak = false;
-            }
+            speakEnabled = !speakEnabled;
         }
     }
 }
