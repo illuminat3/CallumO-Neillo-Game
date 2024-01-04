@@ -55,7 +55,7 @@ namespace Oneillo_2
             }
             else
             {
-                data.Games[comboBox1.SelectedIndex] = gameState;
+                data.Games.Add(JsonConvert.SerializeObject(gameState));  // need json convert
             }
 
             File.WriteAllText(filePath, JsonConvert.SerializeObject(data));
