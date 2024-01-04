@@ -76,10 +76,10 @@
             richTextBox1.BackColor = Color.Beige;
             richTextBox1.BorderStyle = BorderStyle.None;
             richTextBox1.EnableAutoDragDrop = true;
-            richTextBox1.Font = new Font("Verdana", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
-            richTextBox1.Location = new Point(12, 136);
+            richTextBox1.Font = new Font("Verdana", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            richTextBox1.Location = new Point(12, 162);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(269, 587);
+            richTextBox1.Size = new Size(269, 523);
             richTextBox1.TabIndex = 3;
             richTextBox1.Text = resources.GetString("richTextBox1.Text");
             // 
@@ -94,7 +94,7 @@
             labelCopyRight.TabIndex = 4;
             labelCopyRight.Text = "CopyRight Callum Cunningham ©";
             // 
-            // Form2
+            // HelpForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -108,7 +108,7 @@
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "Form2";
+            Name = "HelpForm";
             ShowInTaskbar = false;
             SizeGripStyle = SizeGripStyle.Hide;
             Text = "Form2";
