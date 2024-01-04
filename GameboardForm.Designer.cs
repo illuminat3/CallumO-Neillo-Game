@@ -248,9 +248,9 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
-            Name = "Form1";
+            Name = "O-Neillo-Game";
             SizeGripStyle = SizeGripStyle.Show;
-            Text = "Form1";
+            Text = "O-Neillo-Game";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxBlkToMove).EndInit();
