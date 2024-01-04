@@ -41,12 +41,6 @@ namespace Oneillo_2
             {
                 comboBox1.Items.Add(game.gameName);
             }
-
-            if (data.games.Count < maxGames)
-            {
-                comboBox1.Items.Add(""); 
-            }
-            comboBox1.SelectedIndex = 0;
         }
 
 
@@ -54,7 +48,14 @@ namespace Oneillo_2
         {
             int selectedIndex = comboBox1.SelectedIndex;
 
-            string gameName = textBoxGameName.Text;
+            if (textBoxGameName.Text != null || textBoxGameName.Text != "")
+            {
+                gameState.gameName = textBoxGameName.Text;
+            }
+            else
+            {
+                gameState.gameName = DateTime.Now.ToString();
+            }
 
             if (selectedIndex >= 0 && selectedIndex < data.games.Count)
             {
