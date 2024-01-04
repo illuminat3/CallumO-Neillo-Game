@@ -14,8 +14,7 @@ namespace Oneillo_2
         private int gameMoves = 0; // implement this in the GUI
         private int numOfBlack, numOfWhite;
         private int player = 1;
-        int onOff = 0;
-        int speakOnOff = 0;
+        
 
         private string imagepaths = $"{Environment.CurrentDirectory}\\resources\\";
         private string winner;  // implement this in the GUI
@@ -335,7 +334,7 @@ namespace Oneillo_2
                 // Switch players
                 player = 3 - player; // 2 for black, 1 for white
 
-                if (onOff % 2 == 0)      // only can be displayed when game info panel has not beem hidden 
+                if (showInfoPanel)      // only can be displayed when game info panel has not beem hidden 
                 {
                     if (player == 1)
                     {
@@ -485,16 +484,18 @@ namespace Oneillo_2
 
         private void hideGameInfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            onOff += 1;
-            if (onOff % 2 != 0)             // when clicked / unclicked it enables / disables the game information panel function 
+            showInfoPanel = !showInfoPanel;
+            switch (showInfoPanel)             // when clicked / unclicked it enables / disables the game information panel function 
             {
+                case true:
+                    hideGameInfoToolStripMenuItem.Text = "Show Game Info";   // changes the button text to fit the action
+                    HideGameInfoPanelProperties();
+                    break;
+
+                case false:
                 hideGameInfoToolStripMenuItem.Text = "Hide Game Info";
-                HideGameInfoPanelProperties();
-            }
-            else
-            {
-                hideGameInfoToolStripMenuItem.Text = "Show Game Info";   // changes the button text to fit the action
                 ShowGameInfoPanelProperties();
+                break;
             }
         }
 
@@ -516,15 +517,7 @@ namespace Oneillo_2
 
         private void speakToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            speakOnOff++;
-            if (speakOnOff % 2 != 0)   // when clicked / unclicked it enables / disables the speak function
-            {
-                speak = true;
-            }
-            else
-            {
-                speak = false;
-            }
+            speak = !speak;
         }
     }
 }
