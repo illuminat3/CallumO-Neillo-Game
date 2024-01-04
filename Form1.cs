@@ -76,47 +76,6 @@ namespace Oneillo_2
         }
         // CLick Listener 
 
-        public Form1(GameState gameState)
-        {
-
-            Point top = new Point(10, 30); // setting up the form size
-            Point bottom = new Point(10, 170);
-            InitializeComponent();
-            
-            boardData = gameState.boardData;
-            gameName = gameState.gameName;
-            gameMoves = gameState.gameMoves;
-            player = gameState.player;
-            playerOneName = gameState.playerOneName;
-            playerTwoName = gameState.playerTwoName;
-            numOfBlack = gameState.numOfBlack;
-            numOfWhite = gameState.numOfWhite;
-
-            try
-            {
-                _gameboardGui = new GameboardImageArray(this, boardData, top, bottom, 3, imagepaths); // sets up the board on top of the form
-                _gameboardGui.TileClicked += new GameboardImageArray.TileClickedEventDelegate(GameTileClicked);
-                _gameboardGui.UpdateBoardGui(boardData);
-
-                pictureBoxBlkToMove.Visible = true;
-                pictureBoxWhtToMove.Visible = false;
-
-                CheckNumPieces();                                     // sets the GUI by checking the pieces held by each player
-                lblBlack.Text = $"Counters: {numOfBlack}";
-                lblWhite.Text = $"Counters: {numOfWhite}";            // displays number of pieces held by each player
-
-                lblGameMoves.Text = $"Game Moves: {gameMoves}";
-
-            }
-            catch (Exception ex)
-            {
-                DialogResult result = MessageBox.Show("Board Size Too Small! ");  // checks for excpetion
-                this.Close();
-            }
-            AddOutline();
-
-        }
-
         private bool IsAnyMoveValid(int rowClicked, int columnClicked, int player)
         {
             if (boardData[rowClicked, columnClicked] != 0)
