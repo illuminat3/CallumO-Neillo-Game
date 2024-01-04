@@ -54,6 +54,8 @@ namespace Oneillo_2
         {
             int selectedIndex = comboBox1.SelectedIndex;
 
+            string gameName = textBoxGameName.Text;
+
             if (selectedIndex >= 0 && selectedIndex < data.games.Count)
             {
 
@@ -68,7 +70,6 @@ namespace Oneillo_2
 
             File.WriteAllText(filePath, JsonConvert.SerializeObject(data));
         }
-
 
         private void buttonSaveGame_Click(object sender, EventArgs e)
         {

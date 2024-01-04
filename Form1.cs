@@ -21,7 +21,7 @@ namespace Oneillo_2
         private string winner;  // implement this in the GUI
         private string playerOneName;
         private string playerTwoName;
-        private string gameName = DateTime.Now.ToString();
+        string gameName = DateTime.Now.ToString();
 
         private bool speak;
         private bool showInfoPanel;
