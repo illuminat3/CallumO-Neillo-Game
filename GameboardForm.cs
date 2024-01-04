@@ -384,11 +384,13 @@ namespace Oneillo_2
 
             _gameboardGui.UpdateBoardGui(boardData);
             AddOutline();
+            richTextBoxPlayerOne.Text = playerOneName;
+            richTextBoxPlayerTwo.Text = playerTwoName;
         }
 
         public void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveGamePromptForm newForm = new SaveGamePromptForm(this, boardData, playerOneName, playerTwoName, numOfBlack, numOfWhite, player, gameMoves, gameName);
+            SaveGamePromptForm newForm = new SaveGamePromptForm(this, boardData, richTextBoxPlayerOne.Text, richTextBoxPlayerTwo.Text, numOfBlack, numOfWhite, player, gameMoves, gameName);
             newForm.Show();
         }
 
@@ -437,7 +439,7 @@ namespace Oneillo_2
         private void saveGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Assume you have a gameState object representing the current state
-            GameState gameState = new GameState(boardData, playerOneName, playerTwoName, numOfBlack, numOfWhite, player, gameMoves, gameName);
+            GameState gameState = new GameState(boardData, richTextBoxPlayerOne.Text, richTextBoxPlayerTwo.Text, numOfBlack, numOfWhite, player, gameMoves, gameName);
             SaveGameForm save = new SaveGameForm(gameState);
             save.Show();
         }
