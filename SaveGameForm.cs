@@ -24,11 +24,17 @@ namespace Oneillo_2
 
             filePath = "GameData/Game_Data.JSON";
 
-            data = JsonConvert.DeserializeObject(File.ReadAllText(filePath));         // json deserialization 
+            data = JsonConvert.DeserializeObject(File.ReadAllText(filePath));
 
-            if (data.Games.Count != 0)
+            if (data.Games == null)
             {
-                for (int i = 0; i < data.Games.Count; i++)   // loop through the list
+                // No games exist, create a list to avoid errors
+                data.Games = new List<GameState>();
+            }
+            else
+            {
+                // Games exist, add them to the combobox
+                for (int i = 0; i < data.Games.Count; i++)
                 {
                     comboBox1.Items[i] = data.Games[i].gameName;
                 }
@@ -39,29 +45,20 @@ namespace Oneillo_2
 
         public void SaveGame()
         {
-            // Ensure Games collection is initialized
-            if (data.Games == null)
-            {
-                data.Games = new List<string>(); // Assuming data.Games is a list of strings (serialized game states)
-            }
+            int gameCounter = data.Games.Count;
 
-            // Check the count
-            if (data.Games.Count >= 5)
+
+            //Checks whether to override a gamestate or to add the gamestate
+            if (comboBox1.SelectedIndex == gameCounter)
             {
-                if (comboBox1.SelectedIndex >= 0 && comboBox1.SelectedIndex < data.Games.Count)
-                {
-                    data.Games[comboBox1.SelectedIndex] = JsonConvert.SerializeObject(gameState);
-                }
-                else
-                {
-                    return;
-                }
+                data.Games.Add(gameState);
             }
             else
             {
-                // Add serialized gameState to the Games collection
-                data.Games.Add(JsonConvert.SerializeObject(gameState));
+                data.Games[comboBox1.SelectedIndex] = gameState;
             }
+
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(data));
         }
 
 

@@ -381,8 +381,11 @@ namespace Oneillo_2
             AddOutline();
         }
 
-        private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
+        public void newGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SaveGamePromptForm newForm = new SaveGamePromptForm();
+            newForm.Show();
+
             boardData = new int[rows, columns];
 
             boardData[3, 3] = 2;
